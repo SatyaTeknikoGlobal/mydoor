@@ -62,6 +62,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
 
 	Route::match(['get','post'],'get_chats', 'ApiController@get_chats');
+	Route::match(['get','post'],'get_guards', 'ApiController@get_guards');
+	Route::match(['get','post'],'exit_visitor', 'ApiController@exit_visitor');
 
 
 
@@ -76,6 +78,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
 
 	Route::match(['get','post'],'vehicle_list', 'ApiController@vehicle_list');
+	Route::match(['get','post'],'guard_banners', 'ApiController@guard_banners');
 
 
 

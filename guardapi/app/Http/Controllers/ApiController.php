@@ -22,6 +22,7 @@ use App\City;
 use App\Society;
 use App\Blocks;
 use App\Flats;
+use App\Guard;
 use App\SocietyUser;
 use App\Services;
 use App\ServiceDetail;
@@ -29,6 +30,7 @@ use App\ServiceUsers;
 use App\GuardVisitor;
 use App\Chats;
 use App\UserVehicle;
+use App\GuardBanner;
 
 
 
@@ -59,7 +61,7 @@ class ApiController extends Controller
 public function app_version(){
     $app_version = AppVersion::first();
     return response()->json([
-        'result' => 'success',
+        'result' => true,
         'message' => '',
         'version' => $app_version,
     ],200);
@@ -164,7 +166,7 @@ if(!empty($request->mobile)){
 
 }
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'SMS Sent SuccessFully',
     //'status' =>$status,
     'otp'=>$otp,
@@ -196,7 +198,7 @@ if(!empty($mobile)){
 
 if(!empty($verify_otp)){
  return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'OTP Varified SuccessFully',
 ],200);
 
@@ -211,6 +213,7 @@ if(!empty($verify_otp)){
 
 
 }
+
 
 
 
@@ -353,7 +356,7 @@ public function logout(Request $request)
         JWTAuth::invalidate($request->token);
         $user_login = GuardLogin::where(['deviceID' => $request->input("deviceID")])->delete();
         return response()->json([
-            'result' => 'success',
+            'result' => true,
             'message' => 'User logged out successfully'
         ],200);
     } catch (JWTException $exception) {
@@ -454,7 +457,7 @@ if(!empty($user) && !empty($user->document)){
 }
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Profile Updated successfully',
     'user'=>$user,
 ],200); 
@@ -491,7 +494,7 @@ public function profile(Request $request){
    }
 
    return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'User Profile',
     'user'=>$user,
 ],200);  
@@ -540,7 +543,7 @@ public function state_city_list(Request $request){
 
 
     return response()->json([
-        'result' => 'success',
+        'result' => true,
         'message' => 'State City List',
         'list'=>$states,
     ],200);  
@@ -578,7 +581,7 @@ if(!empty($societies)){
 
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Societies List',
     'societies'=>$societies,
 ],200);
@@ -628,7 +631,7 @@ if($request->type == 'terms'){
 
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'CMS Pages List',
     'pages'=>$pages,
 ],200);
@@ -750,10 +753,10 @@ public function notification_list(Request $request){
             'notifications' =>$notifications,
         ],401);
     } 
-    $notifications = DB::table('notifications')->select('id','guard_id','text','image','description')->where('guard_id',$user->id)->get();
+    $notifications = DB::table('notifications')->where('guard_id',$user->id)->paginate(10);
 
     return response()->json([
-        'result' => 'success',
+        'result' => true,
         'message' => 'Notification List',
         'notifications'=>$notifications,
     ],200);  
@@ -820,7 +823,7 @@ if(!empty($chats)){
 }
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Live Chats List',
     'chats' =>$chats,
 ],200);
@@ -865,7 +868,7 @@ EventChat::create($dbArray);
 
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Submitted SuccessFully',
 ],200);
 
@@ -912,7 +915,7 @@ if(!empty($societyusers)){
 
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Flats List',
     'flats'=>$societyusers,
 ],200);
@@ -963,7 +966,7 @@ public function service_list(Request $request){
 }
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Services List',
     'services'=>$services,
 ],200);
@@ -1012,12 +1015,43 @@ public function service_details(Request $request){
 
 
  return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Services Details List',
     'services'=>$details,
 ],200);
 }
 
+
+
+public function get_guards(Request $request){
+   $validator =  Validator::make($request->all(), [
+    'token' => 'required',
+]);
+
+ $user = null; 
+ if ($validator->fails()) {
+    return response()->json([
+        'result' => 'failure',
+        'message' => json_encode($validator->errors()),
+    ],400);
+}
+$user = JWTAuth::parseToken()->authenticate();
+if (empty($user)){
+    return response()->json([
+        'result' => 'failure',
+        'message' => '',
+    ],401);
+} 
+$success = false;
+$guards = Guard::where('society_id',$user->society_id)->where('status',1)->get();
+
+  return response()->json([
+            'result' => true,
+            'message' => 'Guards List',
+            'guards' => $guards,
+        ],200); 
+ 
+}
 
 
 public function verified_entry(Request $request){
@@ -1173,17 +1207,13 @@ $jsondata = json_decode($request->jsonData);
 $insertArr = [];
 
 
-$title = 'Test';
-$body = ['id'=>3,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$photo];
-//$deviceToken = $login->deviceToken;
-$deviceToken = 'cBzjfeKkSu-N4o-83vv8MN:APA91bET2YJk-44NeR0JDAN5mTgx-ZjoTkuF7ZE1NCP9w_2SCNjilUX3dm1or1d3qykNQ2IQLdwRrW5jNklsV4PzS8MU4sEok8ahZAO9bOnuxl0oslJ_CewblZ0uWcfPg7UxP0H2ef8P';
-$type = 'incomming_request';
-
-$success = $this->send_notification($title, $body, $deviceToken,$type);
-
-
-
-
+//$title = 'Test';
+//$body = ['id'=>3,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$photo];
+////$deviceToken = $login->deviceToken;
+//$deviceToken = 'dx6cnmoXT2G_DomJsnNJm7:APA91bGfc1sAPAwlDVM-s_9Gc4sIdX206lyv5igh6k1dZ7h8DFBSrbvvjIxJ9-7WPb-rp9HmDNdy1mHU5TlI7Vv32ha29dgrPq3QUVY9UqRKLqTPtl6hPKBB9QKC6g9sCWe1VtsOS6Ld';
+//$type='incomming_request';
+//$success = $this->send_notification($title, $body, $deviceToken,$type);
+//
 
 
 
@@ -1234,34 +1264,33 @@ if(!empty($jsondata)){
 
 
 
-        // if(!empty($users)){
-        //     foreach($users as $user){
-        //         $user_login = DB::table('user_logins')->where('user_id',$user->id)->get();
-        //         if(!empty($user_login)){
-        //             foreach($user_login as $login){
-        //                     $title = 'Test';
-        //                     $body = ['id'=>$id,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$image];
-        //                     //$deviceToken = $login->deviceToken;
-        //                     $deviceToken = 'c13He57lRzi4U6KqnuiC28:APA91bE4Jg2lRgQyNov0T9-cBHyyt50vLTLXqpo_nnad4W4MOb4-o2rttD5NEX34ugz4iaJKlsbYvYouqfEk4yj8bGVYZOnFsuln5rAVbTgtmrdBK5FmMGRccs_IHQIR0E1QTRGj7lRo';
-        //                     $type = 'incomming_request';
+         if(!empty($users)){
+             foreach($users as $user){
+                 $user_login = DB::table('user_logins')->where('user_id',$user->id)->get();
+                 if(!empty($user_login)){
+                     foreach($user_login as $login){
+                             $title = 'A Visitor Wait At Gate';
+                             $body = ['id'=>$id,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$image];
+                             $deviceToken = $login->deviceToken;
+                             //$deviceToken = 'dhIxAONPT3y9ZrC9mfiYXD:APA91bEmU7H_nC3eJzk5BzX6AzZB6ryyhcXgbG52styw64_GWPj-rT87kpBLU3EmJwBT3Trniyyz0KT-EkiLex0F4Ot-6u9oVbABQmgpv0ztc0MdqkatX37swtFhtasqmdBCv_2OrOQT';
+                             $type = 'incomming_request';
 
-        //                     $success = $this->send_notification($title, $body, $deviceToken,$type);
-        //                     if($success){
-        //                         $dbArray = [];
-        //                         $dbArray['user_id'] = $login->user_id;
-        //                         $dbArray['text'] = $title??'';
-        //                         $dbArray['title'] = $title ?? '';
+                             $success = $this->send_notification($title, $body, $deviceToken,$type);
+                             if($success){
+                                 $dbArray = [];
+                                 $dbArray['user_id'] = $login->user_id;
+                                 $dbArray['text'] = $title??'';
+                                 $dbArray['title'] = $title ?? '';
+                                 DB::table('notifications')->insert($dbArray);
 
-        //                         DB::table('notifications')->insert($dbArray);
+                             }
 
-        //                     }
-
-        //             }
-        //         }
+                     }
+                 }
 
 
-        //     }
-        // }
+             }
+         }
 
 
 
@@ -1304,6 +1333,7 @@ public function fcmNotification($device_id, $sendData)
         define('API_ACCESS_KEY', 'AAAA-ub9LE8:APA91bFxQB0OiVLwiAhK0YtrnVdAObaX5HG8nRxe-n88lrgK0Cqn-6cxmr9xsrfcSmW2beyq8mtyrbOqPzWEYGmhqFYC7ggl4e1ec-AeKE66MRFBvKvR0HGqY6ftSXRID89LOuBb64yd');
     }
 
+
     $fields = array
     (
         'to'    => $device_id,
@@ -1331,6 +1361,8 @@ public function fcmNotification($device_id, $sendData)
     }
 
     curl_close($ch);
+//    print_r($result);
+//    die;
 
     return $result;
 }
@@ -1362,13 +1394,22 @@ if (empty($user)){
 } 
 $visitors = [];
 
-$visitors = DB::table('guard_visitors')->select('id','name','phone','image','created_at')->where('society_id',$user->society_id)->latest()->groupBy('vis_id')->paginate(10);
+$visitors = DB::table('guard_visitors')->select('id','name','phone','image','created_at','is_approve','approved_by','entry_at','exit_at')->where('society_id',$user->society_id)->where('is_approve',1)->latest()->groupBy('vis_id')->paginate(10);
 
 if(!empty($visitors)){
     foreach($visitors as $vis){
 
         $vis->date = date("d M Y",strtotime($vis->created_at));
+        $vis->time = date("h:i A",strtotime($vis->created_at));
 
+        $user = SocietyUser::where('id',$vis->approved_by)->first();
+
+        $vis->approved_by = $user->name ??'';
+
+        $vis->exit_status = 1;
+        if(empty($vis->exit_at)){
+            $vis->exit_status = 0;
+        }
         if(!empty($vis->image)){
             $vis->image = $this->url.'guardapi/public/uploads/images/visitors/'.$vis->image;
         }
@@ -1377,12 +1418,54 @@ if(!empty($visitors)){
 
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Visitors List',
     'all_visitors' =>$visitors,
 ],200);
 
 }
+
+
+public function exit_visitor(Request $request){
+    $validator =  Validator::make($request->all(), [
+        'token' => 'required',
+        'visitor_id' => 'required',
+    ]);
+    $chats = array();
+    $user = null; 
+    if ($validator->fails()) {
+        return response()->json([
+            'result' => 'failure',
+            'message' => json_encode($validator->errors()),
+
+        ],400);
+    }
+    $user = JWTAuth::parseToken()->authenticate();
+    if (empty($user)){
+        return response()->json([
+            'result' => 'failure',
+            'message' => '',
+        ],401);
+    } 
+
+
+    $exist = DB::table('guard_visitors')->where('id',$request->visitor_id)->first();
+    if(!empty($exist)){
+        DB::table('guard_visitors')->where('id',$request->visitor_id)->update(['exit_at'=>date('Y-m-d H:i:s')]);
+        return response()->json([
+        'result' => true,
+        'message' => 'SuccessFully Exit',
+    ],200);
+    }else{
+        return response()->json([
+        'result' => false,
+        'message' => 'Visitor Not Found',
+    ],200);
+    }
+
+      
+}
+
 
 
 public function get_chats(Request $request){
@@ -1423,7 +1506,7 @@ public function get_chats(Request $request){
 
 
     return response()->json([
-        'result' => 'success',
+        'result' => true,
         'message' => 'Chats List',
         'chats' =>$chats,
     ],200);
@@ -1485,7 +1568,7 @@ if(!empty($flatids)){
 
 
 return response()->json([
-    'result' => 'success',
+    'result' => true,
     'message' => 'Chats List',
     'vehicles' =>$vehicles,
 ],200);
@@ -1493,6 +1576,46 @@ return response()->json([
 
 }
 
+
+
+
+public function guard_banners(Request $request){
+    $validator =  Validator::make($request->all(), [
+    'token' => 'required',
+]);
+ $banners = array();
+ $user = null; 
+ if ($validator->fails()) {
+    return response()->json([
+        'result' => 'failure',
+        'message' => json_encode($validator->errors()),
+
+    ],400);
+}
+$user = JWTAuth::parseToken()->authenticate();
+if (empty($user)){
+    return response()->json([
+        'result' => 'failure',
+        'message' => '',
+    ],401);
+} 
+$banners =[];
+
+
+$banners = GuardBanner::where('status',1)->where('society_id',$user->society_id)->get();
+if(!empty($banners)){
+    foreach($banners as $banner){
+        $banner->image = $this->url.'/public/storage/guard_banner/'.$banner->image;
+    }
+}
+
+return response()->json([
+    'result' => true,
+    'message' => 'Banner List',
+    'banners' =>$banners,
+],200);
+
+}
 
 
 }

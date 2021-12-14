@@ -56,6 +56,17 @@ Class ComplainController extends Controller
 
 
        $societies = Society::where('status',1)->where('is_delete',0)->get();
+
+      $role_id = Auth::guard('admin')->user()->role_id;
+
+        if($role_id!=0 && Auth::guard('admin')->user()->society_id!=0){
+
+          $data['blocks'] = Blocks::where('society_id',Auth::guard('admin')->user()->society_id)->where('status',1)->get();
+
+        $societies = [];
+        }
+
+
        $data['societies'] = $societies;
 
 
@@ -78,7 +89,7 @@ Class ComplainController extends Controller
 
       $routeName = CustomHelper::getAdminRouteName();
       $datas = Complaints::orderBy('id','desc');
-      if($role_id!=0 && Auth::guard('admin')->user()->society_id!=0){
+       if($role_id!=0 && Auth::guard('admin')->user()->society_id!=0){
         $datas->where('society_id',Auth::guard('admin')->user()->society_id);
         }
 

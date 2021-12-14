@@ -42,6 +42,7 @@ Class HomeController extends Controller
 	public function index(Request $request){
 		$data = [];
         $admin_id = Auth::guard('admin')->user()->role_id;
+        $society_id = Auth::guard('admin')->user()->society_id;
         $users = SocietyUsers::select('id')->where('status',1)->where('society_id',Auth::guard('admin')->user()->society_id)->where('is_approve',1)->count();
         $societies = Society::select('id')->where('status',1)->where('id',Auth::guard('admin')->user()->society_id)->where('is_delete',0)->count();
         $complaints = DB::table('complaints')->select('id')->where('society_id',Auth::guard('admin')->user()->society_id)->where('status','!=','completed')->count();
@@ -98,6 +99,43 @@ Class HomeController extends Controller
 
 
 
+
+
+        }else{
+
+            
+            $users = SocietyUsers::select('id')->where('society_id',$society_id)->where('status',1)->where('is_approve',1)->count();
+            $societies = Society::select('id')->where('status',1)->where('is_delete',0)->count();
+            $complaints = DB::table('complaints')->where('society_id',$society_id)->select('id')->where('status','!=','completed')->count();
+            ///////Count Revenue///////////////
+            $jan_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',1)->where('status','paid')->sum('cost');
+            $feb_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',2)->where('status','paid')->sum('cost');
+            $mar_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',3)->where('status','paid')->sum('cost');
+            $apr_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',4)->where('status','paid')->sum('cost');
+            $may_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',5)->where('status','paid')->sum('cost');
+            $june_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',6)->where('status','paid')->sum('cost');
+            $july_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',7)->where('status','paid')->sum('cost');
+            $aug_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',8)->where('status','paid')->sum('cost');
+            $sep_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',9)->where('status','paid')->sum('cost');
+            $oct_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',10)->where('status','paid')->sum('cost');
+            $nov_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',11)->where('status','paid')->sum('cost');
+            $dec_revenue = Billing::select('cost')->where('society_id',$society_id)->where('year',date('Y'))->where('month',12)->where('status','paid')->sum('cost');
+
+
+
+            ////////////Count Users
+    $jan_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',1)->count();
+    $feb_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',2)->count();
+    $mar_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',3)->count();
+    $apr_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',4)->count();
+    $may_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',5)->count();
+    $june_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',6)->count();
+    $july_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',7)->count();
+    $aug_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',8)->count();
+    $sep_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',9)->count();
+    $oct_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',10)->count();
+    $nov_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',11)->count();
+    $dec_user = SocietyUsers::select('id')->where('society_id',$society_id)->whereYear('created_at',date('Y'))->whereMonth('created_at',12)->count();
 
 
         }

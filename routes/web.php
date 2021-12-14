@@ -235,6 +235,27 @@ Route::group(['namespace' => 'Admin', 'prefix' => $ADMIN_ROUTE_NAME, 'as' => $AD
     });
 
 
+
+    Route::group(['prefix' => 'states', 'as' => 'states' , 'middleware' => ['allowedmodule:states'] ], function() {
+
+        Route::get('/', 'StateController@index')->name('.index');
+
+        Route::match(['get', 'post'], '/save/{id?}', 'StateController@save')->name('.save');
+    });  
+
+
+
+
+
+    Route::group(['prefix' => 'cities', 'as' => 'cities' , 'middleware' => ['allowedmodule:cities'] ], function() {
+
+        Route::get('/', 'CityController@index')->name('.index');
+        Route::match(['get', 'post'], '/save/{id?}', 'CityController@save')->name('.save');
+    });
+
+
+
+
 ////blockes
     Route::group(['prefix' => 'blockes', 'as' => 'blockes' , 'middleware' => ['allowedmodule:blockes'] ], function() {
 
@@ -247,6 +268,43 @@ Route::group(['namespace' => 'Admin', 'prefix' => $ADMIN_ROUTE_NAME, 'as' => $AD
         Route::match(['get', 'post'], 'edit/{id}', 'BlockController@add')->name('.edit');
         Route::post('ajax_delete_image', 'BlockController@ajax_delete_image')->name('.ajax_delete_image');
         Route::match(['get','post'],'delete/{id}', 'BlockController@delete')->name('.delete');
+        
+
+    });
+
+
+/////// banners
+
+
+     Route::group(['prefix' => 'banners', 'as' => 'banners' , 'middleware' => ['allowedmodule:banners'] ], function() {
+
+        Route::get('/', 'BannerController@index')->name('.index');
+        Route::match(['get', 'post'], 'add', 'BannerController@add')->name('.add');
+
+        Route::match(['get', 'post'], 'get_banners', 'BannerController@get_banners')->name('.get_banners');
+         Route::match(['get', 'post'], 'change_banner_status', 'BannerController@change_banner_status')->name('.change_banner_status');
+
+         Route::match(['get', 'post'], 'edit/{id}', 'BannerController@add')->name('.edit');
+        // Route::post('ajax_delete_image', 'BlockController@ajax_delete_image')->name('.ajax_delete_image');
+        // Route::match(['get','post'],'delete/{id}', 'BlockController@delete')->name('.delete');
+        
+
+    });
+
+/////// NOTICE BOARD
+
+
+       Route::group(['prefix' => 'notice_board', 'as' => 'notice_board' , 'middleware' => ['allowedmodule:notice_board'] ], function() {
+
+        Route::get('/', 'NoticeBoardController@index')->name('.index');
+        // Route::match(['get', 'post'], 'add', 'BlockController@add')->name('.add');
+
+        // Route::match(['get', 'post'], 'get_blocks', 'BlockController@get_blocks')->name('.get_blocks');
+        // Route::match(['get', 'post'], 'change_block_status', 'BlockController@change_block_status')->name('.change_block_status');
+
+        // Route::match(['get', 'post'], 'edit/{id}', 'BlockController@add')->name('.edit');
+        // Route::post('ajax_delete_image', 'BlockController@ajax_delete_image')->name('.ajax_delete_image');
+        // Route::match(['get','post'],'delete/{id}', 'BlockController@delete')->name('.delete');
         
 
     });
@@ -273,6 +331,22 @@ Route::group(['namespace' => 'Admin', 'prefix' => $ADMIN_ROUTE_NAME, 'as' => $AD
     });
 
 
+
+////Guards
+    Route::group(['prefix' => 'guards', 'as' => 'guards' , 'middleware' => ['allowedmodule:guards'] ], function() {
+
+        Route::get('/', 'GuardController@index')->name('.index');
+        Route::match(['get', 'post'], 'add', 'GuardController@add')->name('.add');
+
+        Route::match(['get', 'post'], 'get_guards', 'GuardController@get_guards')->name('.get_guards');
+        Route::match(['get', 'post'], 'change_guards_status', 'GuardController@change_guards_status')->name('.change_guards_status');
+        Route::match(['get', 'post'], 'change_guards_approve', 'GuardController@change_guards_approve')->name('.change_guards_approve');
+
+        Route::match(['get', 'post'], 'edit/{id}', 'GuardController@add')->name('.edit');
+        Route::match(['get','post'],'delete/{id}', 'GuardController@delete')->name('.delete');
+       
+
+    });
 
 
 

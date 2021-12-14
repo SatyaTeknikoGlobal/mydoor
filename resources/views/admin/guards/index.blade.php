@@ -21,10 +21,10 @@ $roleId = Auth::guard('admin')->user()->role_id;
       <div class="row">
         <div class="col-xl-12">
           <div class="breadcrumb-holder">
-            <h1 class="main-title float-left">All Admins</h1>
+            <h1 class="main-title float-left">All Guards</h1>
             <ol class="breadcrumb float-right">
               <li class="breadcrumb-item">Home</li>
-              <li class="breadcrumb-item active">All Admins</li>
+              <li class="breadcrumb-item active">All Guards</li>
             </ol>
             <div class="clearfix"></div>
           </div>
@@ -39,7 +39,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" data-select2-id="10">
           <div class="card mb-3">
            <div class="card-header">
-            <h3>Credit/Debit User Wallet</h3>
+            <h3>Guards</h3>
           </div>
 
           <form method="POST" action="" >
@@ -83,27 +83,15 @@ $roleId = Auth::guard('admin')->user()->role_id;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
    <div class="row">
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <div class="card mb-3">
         <div class="card-header">
-          <h3>All Admins List</h3>
-          @if(CustomHelper::isAllowedSection('admins' , $roleId , $type='add'))
+          <h3>All Guard List</h3>
+          @if(CustomHelper::isAllowedSection('guards' , $roleId , $type='add'))
           <span class="pull-right">
-            <a href="{{ route($routeName.'.admins.add', ['back_url'=>$BackUrl]) }}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus" aria-hidden="true"></i> Add New Admin</a>
+            <a href="{{ route($routeName.'.guards.add', ['back_url'=>$BackUrl]) }}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus" aria-hidden="true"></i> Add New Guard</a>
           </span>
           @endif
         </div>
@@ -115,9 +103,8 @@ $roleId = Auth::guard('admin')->user()->role_id;
                 <tr>
                  <th scope="col">#ID</th>
                  <th scope="col">Name</th>
-                 <th scope="col">UserName</th>
                  <th scope="col">Email</th>
-                 <th scope="col">Role</th>
+                 <th scope="col">Phone</th>
                  <th scope="col">Society Name</th>
                  <th scope="col">Approve/Not Approve</th>
                  <th scope="col">Location</th>
@@ -163,16 +150,15 @@ $roleId = Auth::guard('admin')->user()->role_id;
    ordering: false,
    processing: true,
    serverSide: true,
-   ajax: '{{ route($routeName.'.admins.get_admins') }}',
+   ajax: '{{ route($routeName.'.guards.get_guards') }}',
    columns: [
    { data: 'id', name: 'id' },
    { data: 'name', name: 'name' ,searchable: false, orderable: false},
-   { data: 'username', name: 'username'},
    { data: 'email', name: 'email'},
-   { data: 'role_id', name: 'role_id'},
+   { data: 'phone', name: 'phone'},
    { data: "society_id",name: 'society_id'},
    { data: 'is_approve', name: 'is_approve' },
-   { data: 'address', name: 'address' },
+   { data: 'location', name: 'location' },
    { data: 'state', name: 'state' },
    { data: 'city', name: 'city' },
    { data: 'status', name: 'status' },
@@ -183,16 +169,16 @@ $roleId = Auth::guard('admin')->user()->role_id;
    ],
  });
 
-  function change_admins_status(admin_id){
-    var status = $('#change_admins_status'+admin_id).val();
+  function change_guards_status(guard_id){
+    var status = $('#change_guards_status'+guard_id).val();
 
 
     var _token = '{{ csrf_token() }}';
 
     $.ajax({
-      url: "{{ route($routeName.'.admins.change_admins_status') }}",
+      url: "{{ route($routeName.'.guards.change_guards_status') }}",
       type: "POST",
-      data: {admin_id:admin_id, status:status},
+      data: {guard_id:guard_id, status:status},
       dataType:"JSON",
       headers:{'X-CSRF-TOKEN': _token},
       cache: false,
@@ -210,16 +196,16 @@ $roleId = Auth::guard('admin')->user()->role_id;
   }
 
 
-  function change_admins_approve(admin_id){
-    var approve = $('#change_admins_approve'+admin_id).val();
+  function change_guards_approve(guard_id){
+    var approve = $('#change_guards_approve'+guard_id).val();
 
 
     var _token = '{{ csrf_token() }}';
 
     $.ajax({
-      url: "{{ route($routeName.'.admins.change_admins_approve') }}",
+      url: "{{ route($routeName.'.guards.change_guards_approve') }}",
       type: "POST",
-      data: {admin_id:admin_id, approve:approve},
+      data: {guard_id:guard_id, approve:approve},
       dataType:"JSON",
       headers:{'X-CSRF-TOKEN': _token},
       cache: false,
@@ -233,30 +219,6 @@ $roleId = Auth::guard('admin')->user()->role_id;
       }
     });
 
-
-  }
-
-  function change_admins_role(admin_id){
-    var role_id = $('#change_admins_role'+admin_id).val();
-
-    var _token = '{{ csrf_token() }}';
-
-    $.ajax({
-      url: "{{ route($routeName.'.admins.change_admins_role') }}",
-      type: "POST",
-      data: {admin_id:admin_id, role_id:role_id},
-      dataType:"JSON",
-      headers:{'X-CSRF-TOKEN': _token},
-      cache: false,
-      success: function(resp){
-        if(resp.success){
-          alert(resp.message);
-        }else{
-          alert(resp.message);
-
-        }
-      }
-    });
 
   }
 

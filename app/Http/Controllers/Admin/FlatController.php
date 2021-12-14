@@ -220,10 +220,20 @@ $data['id'] = $id;
 $data['flats'] = $flats;
 
 $data['societies'] = Society::where('status',1)->get();
+
+$role_id = Auth::guard('admin')->user()->role_id;
+$admin_society_id = Auth::guard('admin')->user()->society_id;
+if($role_id == 0){
 if(is_numeric($id) && $id > 0){
 
     $data['blocks'] = Blocks::where('society_id',$flats->society_id)->where('status',1)->get();
 }
+}
+else{
+    $data['blocks'] = Blocks::where('society_id',$admin_society_id)->where('status',1)->get();
+    
+}
+
 
 return view('admin.flats.form', $data);
 

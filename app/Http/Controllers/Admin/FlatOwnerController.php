@@ -61,10 +61,8 @@ Class FlatOwnerController extends Controller
       $routeName = CustomHelper::getAdminRouteName();
       $datas = SocietyUsers::where('parent',0)->orderBy('id','desc');
       if($role_id!=0){
-        $datas->where('added_by',Auth::guard('admin')->user()->id);
+        $datas->where('society_id',Auth::guard('admin')->user()->society_id);
     }
-
-
     $datas = $datas->get();
 
     return Datatables::of($datas)
@@ -350,6 +348,12 @@ public function add_bill(Request $request){
     $dbArray['year'] = $request->year;
     $dbArray['user_id'] = $request->user_id;
     $dbArray['flat_id'] = $request->flat_id;
+
+
+
+    $society_id = Flats::where('id',$request->flat_id)->first()->id;
+    $dbArray['society_id'] = $society_id;
+
     $dbArray['status'] = 'pending';
     $dbArray['type'] = $request->type;
     $dbArray['cost'] = $request->cost;
@@ -454,10 +458,29 @@ $data['flatowners'] = $flatowners;
 $data['societies'] = Society::where('status',1)->get();
 $data['states'] = State::where('status',1)->get();
 
+
+$role_id = Auth::guard('admin')->user()->role_id;
+$admin_society_id = Auth::guard('admin')->user()->society_id;
+
+if($role_id == 0){
 if(is_numeric($id) && $id > 0){
     $data['blocks'] = Blocks::where('society_id',$flatowners->society_id)->where('status',1)->get();
     $data['flats'] = Flats::where('block_id',$flatowners->block_id)->where('status',1)->get();
     $data['cities'] = City::where('state_id',$flatowners->state_id)->where('status',1)->get();
+
+}
+}else{
+    if(is_numeric($id) && $id > 0){
+    $data['blocks'] = Blocks::where('society_id',$admin_society_id)->where('status',1)->get();
+    $data['flats'] = Flats::where('block_id',$flatowners->block_id)->where('status',1)->get();
+    $data['cities'] = City::where('state_id',Auth::guard('admin')->user()->city_id)->where('status',1)->get();
+}
+}
+
+if($role_id == 0){
+$data['blocks'] = Blocks::where('society_id',$flatowners->society_id)->where('status',1)->get();
+}else{
+$data['blocks'] = Blocks::where('society_id',$admin_society_id)->where('status',1)->get();
 
 }
 

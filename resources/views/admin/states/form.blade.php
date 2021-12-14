@@ -1,20 +1,22 @@
 @include('admin.common.header')
 <?php
-$BackUrl = CustomHelper::BackUrl();
-$ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
-$role_id = Auth::guard('admin')->user()->role_id;
-$admin_society_id = Auth::guard('admin')->user()->society_id;
+$back_url = (request()->has('back_url'))?request()->input('back_url'):'';
+if(empty($back_url)){
+    $back_url = 'admin/states';
+}
 
-$blocke_id = (isset($blockes->id))?$blockes->id:'';
-$name = (isset($blockes->name))?$blockes->name:'';
-$society_id = (isset($blockes->society_id))?$blockes->society_id:'';
-$status = (isset($blockes->status))?$blockes->status:'';
+$name = (isset($rec->name))?$rec->name:'';
+$country_id = (isset($rec->country_id))?$rec->country_id:'';
 
+$state_id = (isset($rec->id))?$rec->id:'';
+$image = (isset($rec->img))?$rec->img:'';
+$status = (isset($rec->status))?$rec->status:1;
 
-$routeName = CustomHelper::getSadminRouteName();
 $storage = Storage::disk('public');
-$path = 'influencer/';
 
+    //pr($storage);
+
+$path = 'states/';
 ?>
 
 
@@ -60,30 +62,7 @@ $path = 'influencer/';
                          <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data" role="form">
                             {{ csrf_field() }}
 
-                            <input type="hidden" name="id" value="{{$blocke_id}}">
-
-
-
-                                <?php if($role_id == 0){?>
-                             <div class="form-group">
-                                <label for="userName">Society Name<span class="text-danger">*</span></label>
-                               <select name="society_id" class="form-control select2">
-                                   <option value="" selected disabled>Select Society</option>
-                                   <?php if(!empty($societies)){
-                                    foreach($societies as $soci){
-                                    ?>
-                                    <option value="{{$soci->id}}" <?php if($soci->id == $society_id) echo "selected"?>>{{$soci->name}}</option>
-                                <?php }}?>
-
-                               </select>
-
-                                @include('snippets.errors_first', ['param' => 'society_id'])
-                            </div>
-                        <?php }else{?>
-                            <input type="hidden" name="society_id" value="{{$admin_society_id}}">
-                            <?php }?>
-
-
+                          <input type="hidden" name="id" value="{{$state_id}}">
 
 
                             <div class="form-group">

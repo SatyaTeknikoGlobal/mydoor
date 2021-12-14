@@ -2,11 +2,14 @@
 
 return [
     'allowed' => [
-        'location',
+        //'location',
     	'blockes',
+        'states',
+        'cities',
         'flats',
         'roles',
         'permission',
+        'guards',
         'society',
         'admins',
         'flatowners',
@@ -16,6 +19,8 @@ return [
         'service_user',
         'complaints',
         'flat_categories',
+        'banners',
+        'notice_board',
     ],
 
 
@@ -38,6 +43,9 @@ return [
         'notifications' => 'Notifications',
         'service_user' => 'Service Users',
         'complaints' => 'Complaints',
+        'guards' => 'Guards',
+        'banners' => 'Banners',
+        'notice_board' => 'Notice Board',
     ],
 
 
