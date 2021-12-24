@@ -31,6 +31,7 @@ use App\GuardVisitor;
 use App\Chats;
 use App\UserVehicle;
 use App\GuardBanner;
+use App\StaffAttendance;
 
 
 
@@ -1028,8 +1029,8 @@ public function get_guards(Request $request){
     'token' => 'required',
 ]);
 
- $user = null; 
- if ($validator->fails()) {
+   $user = null; 
+   if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1045,12 +1046,12 @@ if (empty($user)){
 $success = false;
 $guards = Guard::where('society_id',$user->society_id)->where('status',1)->get();
 
-  return response()->json([
-            'result' => true,
-            'message' => 'Guards List',
-            'guards' => $guards,
-        ],200); 
- 
+return response()->json([
+    'result' => true,
+    'message' => 'Guards List',
+    'guards' => $guards,
+],200); 
+
 }
 
 
@@ -1224,7 +1225,8 @@ if(!empty($jsondata)){
     $dbArray1['society_id'] = $user->society_id;
 
     $dbArray1['phone'] = $request->contactNumber;
-    //$dbArray1['reason'] = $request->name;
+    $dbArray1['category'] = $request->category;
+    $dbArray1['sub_category'] = $request->sub_category;
 
     $vis_id = DB::table('guard_visitor_info')->insertGetId($dbArray1);
 
@@ -1264,37 +1266,37 @@ if(!empty($jsondata)){
 
 
 
-         if(!empty($users)){
-             foreach($users as $user){
-                 $user_login = DB::table('user_logins')->where('user_id',$user->id)->get();
-                 if(!empty($user_login)){
-                     foreach($user_login as $login){
-                             $title = 'A Visitor Wait At Gate';
-                             $body = ['id'=>$id,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$image];
-                             $deviceToken = $login->deviceToken;
+        if(!empty($users)){
+         foreach($users as $user){
+             $user_login = DB::table('user_logins')->where('user_id',$user->id)->get();
+             if(!empty($user_login)){
+                 foreach($user_login as $login){
+                     $title = $request->sub_category ?? 'A Visitor Wait At Gate';
+                     $body = ['id'=>$id,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$image];
+                     $deviceToken = $login->deviceToken;
                              //$deviceToken = 'dhIxAONPT3y9ZrC9mfiYXD:APA91bEmU7H_nC3eJzk5BzX6AzZB6ryyhcXgbG52styw64_GWPj-rT87kpBLU3EmJwBT3Trniyyz0KT-EkiLex0F4Ot-6u9oVbABQmgpv0ztc0MdqkatX37swtFhtasqmdBCv_2OrOQT';
-                             $type = 'incomming_request';
+                     $type = 'incomming_request';
 
-                             $success = $this->send_notification($title, $body, $deviceToken,$type);
-                             if($success){
-                                 $dbArray = [];
-                                 $dbArray['user_id'] = $login->user_id;
-                                 $dbArray['text'] = $title??'';
-                                 $dbArray['title'] = $title ?? '';
-                                 DB::table('notifications')->insert($dbArray);
-
-                             }
+                     $success = $this->send_notification($title, $body, $deviceToken,$type);
+                     if($success){
+                         $dbArray = [];
+                         $dbArray['user_id'] = $login->user_id;
+                         $dbArray['text'] = $title??'';
+                         $dbArray['title'] = $title ?? '';
+                         DB::table('notifications')->insert($dbArray);
 
                      }
+
                  }
-
-
              }
+
+
          }
+     }
 
 
 
-    }
+ }
 }
 
 
@@ -1453,17 +1455,17 @@ public function exit_visitor(Request $request){
     if(!empty($exist)){
         DB::table('guard_visitors')->where('id',$request->visitor_id)->update(['exit_at'=>date('Y-m-d H:i:s')]);
         return response()->json([
-        'result' => true,
-        'message' => 'SuccessFully Exit',
-    ],200);
+            'result' => true,
+            'message' => 'SuccessFully Exit',
+        ],200);
     }else{
         return response()->json([
-        'result' => false,
-        'message' => 'Visitor Not Found',
-    ],200);
+            'result' => false,
+            'message' => 'Visitor Not Found',
+        ],200);
     }
 
-      
+
 }
 
 
@@ -1581,13 +1583,88 @@ return response()->json([
 
 public function guard_banners(Request $request){
     $validator =  Validator::make($request->all(), [
+        'token' => 'required',
+    ]);
+    $banners = array();
+    $user = null; 
+    if ($validator->fails()) {
+        return response()->json([
+            'result' => 'failure',
+            'message' => json_encode($validator->errors()),
+
+        ],400);
+    }
+    $user = JWTAuth::parseToken()->authenticate();
+    if (empty($user)){
+        return response()->json([
+            'result' => 'failure',
+            'message' => '',
+        ],401);
+    } 
+    $banners =[];
+
+
+    $banners = GuardBanner::where('status',1)->where('society_id',$user->society_id)->get();
+    if(!empty($banners)){
+        foreach($banners as $banner){
+            $banner->image = $this->url.'/public/storage/guard_banner/'.$banner->image;
+        }
+    }
+
+    return response()->json([
+        'result' => true,
+        'message' => 'Banner List',
+        'banners' =>$banners,
+    ],200);
+
+}
+
+public function emergency_nos(Request $request){
+    $validator =  Validator::make($request->all(), [
+        'token' => 'required',
+    ]);
+    $user = null;
+    if ($validator->fails()) {
+        return response()->json([
+            'result' => false,
+            'message' => json_encode($validator->errors()),
+
+        ],400);
+    }
+    $user = JWTAuth::parseToken()->authenticate();
+    if (empty($user)){
+        return response()->json([
+            'result' => false,
+            'message' => '',
+        ],401);
+    }
+
+    $emergency_nos = [];
+
+    $emergency_nos = DB::table('society_information')->where('society_id',$user->society_id)->get();
+
+    return response()->json([
+        'result' => true,
+        'message' => 'Succesfully',
+        'emergency_nos' => $emergency_nos,
+    ],200);
+
+
+
+}
+
+
+
+
+
+public function sub_category_list(Request $request){
+   $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
- $banners = array();
- $user = null; 
- if ($validator->fails()) {
+   $user = null;
+   if ($validator->fails()) {
     return response()->json([
-        'result' => 'failure',
+        'result' => false,
         'message' => json_encode($validator->errors()),
 
     ],400);
@@ -1595,27 +1672,229 @@ public function guard_banners(Request $request){
 $user = JWTAuth::parseToken()->authenticate();
 if (empty($user)){
     return response()->json([
-        'result' => 'failure',
+        'result' => false,
         'message' => '',
     ],401);
-} 
-$banners =[];
+}
 
+$sub_category_list = [];
 
-$banners = GuardBanner::where('status',1)->where('society_id',$user->society_id)->get();
-if(!empty($banners)){
-    foreach($banners as $banner){
-        $banner->image = $this->url.'/public/storage/guard_banner/'.$banner->image;
+$deliveryArr = config('custom.deliveryArr');
+$cabArr = config('custom.cabArr');
+
+$alldeliveryArr = [];
+$allcabArr = [];
+if(!empty($deliveryArr)){
+    foreach ($deliveryArr as $key => $value) {
+        $dbArray = [];
+        $dbArray['name'] = $key;
+        $dbArray['icon'] = $value;
+        $dbArray['category_name'] = "Delivery";
+        $alldeliveryArr[] = $dbArray;
     }
 }
 
+if(!empty($cabArr)){
+    foreach ($cabArr as $key => $value) {
+        $dbArray1 = [];
+        $dbArray1['name'] = $key;
+        $dbArray1['icon'] = $value;
+        $dbArray1['category_name'] = "Cab";
+
+        $allcabArr[] = $dbArray1;
+    }
+}
+
+$sub_category_list['deliveryArr'] = $alldeliveryArr;
+$sub_category_list['cabArr'] = $allcabArr;
+
+
 return response()->json([
     'result' => true,
-    'message' => 'Banner List',
-    'banners' =>$banners,
+    'message' => 'Succesfully',
+    'sub_category_list' => $sub_category_list,
 ],200);
 
 }
+
+
+public function staff_list(Request $request){
+   $validator =  Validator::make($request->all(), [
+    'token' => 'required',
+]);
+   $user = null;
+   if ($validator->fails()) {
+    return response()->json([
+        'result' => false,
+        'message' => json_encode($validator->errors()),
+
+    ],400);
+}
+$user = JWTAuth::parseToken()->authenticate();
+if (empty($user)){
+    return response()->json([
+        'result' => false,
+        'message' => '',
+    ],401);
+}
+
+$staffs = [];
+$search = isset($request->search) ? $request->search :'';
+
+
+$staffs = ServiceUsers::select('id','name','email','phone','image')->where('society_id',$user->society_id)->where('status',1)->where('is_delete',0);
+if(!empty($search)){
+    $staffs->where('name', 'like', '%' . $search . '%');
+    $staffs->orWhere('phone', 'like', '%' . $search . '%');
+    $staffs->orWhere('email', 'like', '%' . $search . '%');
+}
+
+$staffs = $staffs->paginate(10);
+if(!empty($staffs)){
+    foreach($staffs as $staff){
+        $attend = StaffAttendance::where('staff_id',$staff->id)->where('date',date('Y-m-d'))->first();
+        if(empty($attend)){
+                $present = 0; ///////IN
+            }else{
+                // if($attend->in_time !=NULL || $attend->in_time !=''){
+                //      $present = 1; ///////OUT 
+                //  }else if($attend->out_time !=NULL || $attend->out_time !=''){
+                //      $present = 2; ///////Nothing 
+                //  }
+
+                if(!empty($attend->in_time) && empty($attend->out_time)){
+                    $present = 1;
+                }
+                if(!empty($attend->out_time) && !empty($attend->in_time)){
+                    $present = 2;
+                }
+
+
+             }
+             $staff->present = $present;
+             if(!empty($staff->image)){
+                $staff->image = $this->url.'/public/storage/service_user/'.$staff->image;
+            }
+
+            $exists = DB::table('user_daily_help')->select('flat_id')->where('service_user_id',$staff->id)->get();
+            if(!empty($exists)){
+                foreach($exists as $exist){
+                    $users = SocietyUser::where('flat_no',$exist->flat_id)->where('user_type','owner')->first();
+                    $flat = Flats::where('id',$exist->flat_id)->first();
+                    $exist->flat_no = $flat->flat_no ?? '';
+                    $exist->phone_no = $users->phone ?? '';
+                }
+            }
+
+            $staff->flats = $exists;
+
+        }
+    }
+
+
+    return response()->json([
+        'result' => true,
+        'message' => 'Succesfully',
+        'staffs' => $staffs,
+    ],200); 
+}
+
+
+public function in_out_staff(Request $request){
+    $validator =  Validator::make($request->all(), [
+        'token' => 'required',
+        'staff_id' => 'required',
+        'type' => 'required',
+    ]);
+    $user = null;
+    if ($validator->fails()) {
+        return response()->json([
+            'result' => false,
+            'message' => json_encode($validator->errors()),
+
+        ],400);
+    }
+    $user = JWTAuth::parseToken()->authenticate();
+    if (empty($user)){
+        return response()->json([
+            'result' => false,
+            'message' => '',
+        ],401);
+    }
+
+
+    $staff = ServiceUsers::where('id',$request->staff_id)->first();
+
+    // $exist = StaffAttendance::where('staff_id',$staff->id)->where('date',date('Y-m-d'))->first();
+    // if(empty($exist)){
+    //    $dbArray = [];
+    //    $dbArray['staff_id'] = $request->staff_id;
+    //    $dbArray['date'] = date('Y-m-d');
+    //    $dbArray['in_time'] = date('h:i');
+    //    StaffAttendance::insert($dbArray);
+    // }
+
+    if($request->type == 'IN'){
+        $exist = StaffAttendance::where('staff_id',$staff->id)->where('date',date('Y-m-d'))->first();
+        if(empty($exist)){
+           $dbArray = [];
+           $dbArray['staff_id'] = $request->staff_id;
+           $dbArray['date'] = date('Y-m-d');
+           $dbArray['in_time'] = date('h:i');
+           StaffAttendance::insert($dbArray);
+
+           return response()->json([
+            'result' => true,
+            'message' => 'CheckIn Succesfully',
+        ],200); 
+
+       }else{
+         return response()->json([
+            'result' => false,
+            'message' => 'Already CheckIn',
+        ],200); 
+     }
+ }
+ if($request->type == 'OUT'){
+    $exist = StaffAttendance::where('staff_id',$staff->id)->where('date',date('Y-m-d'))->where('in_time','!=',NULL)->first();
+    if(!empty($exist)){
+        if($exist->out_time == '' || $exist->out_time == NULL){
+           StaffAttendance::where('id',$exist->id)->update(['out_time'=>date('h:i')]);
+                return response()->json([
+                    'result' => true,
+                    'message' => 'CheckOut Succesfully',
+                ],200); 
+            }else{
+                return response()->json([
+                    'result' => false,
+                    'message' => 'Already CheckOut',
+                ],200);  
+            }
+        
+    }else{
+
+       return response()->json([
+        'result' => false,
+        'message' => 'Please Check In First',
+    ],200);
+   }   
+
+}
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
 
 
 }

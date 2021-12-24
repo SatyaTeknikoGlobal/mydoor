@@ -80,6 +80,14 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 	Route::match(['get','post'],'vehicle_list', 'ApiController@vehicle_list');
 	Route::match(['get','post'],'guard_banners', 'ApiController@guard_banners');
 
+	
+	Route::match(['get','post'],'emergency_nos', 'ApiController@emergency_nos');
+	Route::match(['get','post'],'sub_category_list', 'ApiController@sub_category_list');
+
+	
+	Route::match(['get','post'],'staff_list', 'ApiController@staff_list');
+	Route::match(['get','post'],'in_out_staff', 'ApiController@in_out_staff');
+
 
 
 

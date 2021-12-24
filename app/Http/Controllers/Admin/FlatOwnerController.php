@@ -477,8 +477,12 @@ if(is_numeric($id) && $id > 0){
 }
 }
 
+
 if($role_id == 0){
+   if(is_numeric($id) && $id > 0 && !empty($flatowners->society_id)){
+
 $data['blocks'] = Blocks::where('society_id',$flatowners->society_id)->where('status',1)->get();
+}
 }else{
 $data['blocks'] = Blocks::where('society_id',$admin_society_id)->where('status',1)->get();
 

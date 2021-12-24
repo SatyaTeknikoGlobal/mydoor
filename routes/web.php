@@ -297,14 +297,18 @@ Route::group(['namespace' => 'Admin', 'prefix' => $ADMIN_ROUTE_NAME, 'as' => $AD
        Route::group(['prefix' => 'notice_board', 'as' => 'notice_board' , 'middleware' => ['allowedmodule:notice_board'] ], function() {
 
         Route::get('/', 'NoticeBoardController@index')->name('.index');
-        // Route::match(['get', 'post'], 'add', 'BlockController@add')->name('.add');
+        Route::match(['get', 'post'], 'add', 'NoticeBoardController@add')->name('.add');
 
-        // Route::match(['get', 'post'], 'get_blocks', 'BlockController@get_blocks')->name('.get_blocks');
-        // Route::match(['get', 'post'], 'change_block_status', 'BlockController@change_block_status')->name('.change_block_status');
+        Route::match(['get', 'post'], 'get_notice_board', 'NoticeBoardController@get_notice_board')->name('.get_notice_board');
+        Route::match(['get', 'post'], 'change_notice_board_status', 'NoticeBoardController@change_notice_board_status')->name('.change_notice_board_status');
 
-        // Route::match(['get', 'post'], 'edit/{id}', 'BlockController@add')->name('.edit');
-        // Route::post('ajax_delete_image', 'BlockController@ajax_delete_image')->name('.ajax_delete_image');
-        // Route::match(['get','post'],'delete/{id}', 'BlockController@delete')->name('.delete');
+        Route::match(['get', 'post'], 'edit/{id}', 'NoticeBoardController@add')->name('.edit');
+
+        Route::match(['get', 'post'], 'documents/{id}', 'NoticeBoardController@documents')->name('.documents');
+
+        Route::post('ajax_delete_image', 'NoticeBoardController@ajax_delete_image')->name('.ajax_delete_image');
+        Route::match(['get','post'],'delete/{id}', 'NoticeBoardController@delete')->name('.delete');
+        Route::match(['get','post'],'delete_document/{doc_id}', 'NoticeBoardController@delete_document')->name('.delete_document');
         
 
     });
@@ -420,6 +424,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => $ADMIN_ROUTE_NAME, 'as' => $AD
 
 
         Route::match(['get','post'],'documents/{id}', 'SocietyController@documents')->name('.documents');
+        Route::match(['get','post'],'info/{id}', 'SocietyController@info')->name('.info');
+        Route::match(['get','post'],'delete_info/{id}', 'SocietyController@delete_info')->name('.delete_info');
     });
 
      ////society

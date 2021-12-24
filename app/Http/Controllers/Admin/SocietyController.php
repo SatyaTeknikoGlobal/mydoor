@@ -120,13 +120,13 @@ return  $html;
 
    if(CustomHelper::isAllowedSection('society' , Auth::guard('admin')->user()->role_id , $type='edit')){
     $html.='<a title="Edit" href="' . route($routeName.'.society.edit',$data->id.'?back_url='.$BackUrl) . '"><i class="fa fa-edit">Edit</i></a>&nbsp;&nbsp;&nbsp;';
-}   
+    }   
 
 if(CustomHelper::isAllowedSection('society' , Auth::guard('admin')->user()->role_id , $type='delete')){
             // $html.='<a title="Edit" href="' . route($routeName.'.society.delete',$data->id.'?back_url='.$BackUrl) . '"><i class="fa fa-trash">Delete</i></a>&nbsp;&nbsp;&nbsp;';
 }  
 
-
+$html.='<a title="Edit" href="' . route($routeName.'.society.info',$data->id.'?back_url='.$BackUrl) . '"><i class="fa fa-info-circle">Info</i></a>&nbsp;&nbsp;&nbsp;';
 
 return $html;
 })
@@ -335,6 +335,64 @@ public function delete(Request $request){
     }
 }
 
+
+
+
+public function delete_info(Request $request){
+
+        //prd($request->toArray());
+
+    $id = (isset($request->id))?$request->id:0;
+
+    $is_delete = '';
+
+    if(is_numeric($id) && $id > 0){
+        $is_delete = DB::table('society_information')->where('id', $id)->delete();
+    }
+
+    if(!empty($is_delete)){
+        return back()->with('alert-success', 'Society Info has been deleted successfully.');
+    }
+    else{
+        return back()->with('alert-danger', 'something went wrong, please try again...');
+    }
+}
+
+public function info(Request $request){
+    $id = isset($request->id) ? $request->id :'';
+    $data = [];
+
+    $method = $request->method();
+    if($method == 'post' || $method == 'POST'){
+        $rules = [];
+        $rules['title'] = 'required';
+        $rules['number'] = 'required';
+        $rules['society_id'] = 'required';
+
+        $this->validate($request,$rules);
+
+
+        $dbArray = [];
+        $dbArray['society_id'] = $request->society_id;
+        $dbArray['title'] = $request->title;
+        $dbArray['number'] = $request->number;
+        $dbArray['status'] = 1;
+
+        DB::table('society_information')->insert($dbArray);
+    }
+
+
+
+
+    $society = Society::where('id',$id)->first();
+
+    $info = DB::table('society_information')->where('society_id',$id)->get();
+    $data['info'] = $info;
+    $data['society'] = $society;
+
+     return view('admin.society.info',$data);
+
+}
 
 
 public function change_society_status(Request $request){

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>MyDoor Admin - Dashboard</title>
+    <title>UBERIZE GATE Admin - Dashboard</title>
     <meta name="description" content="">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,7 +75,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
             <div class="headerbar-left">
                 <a href="{{url('/admin')}}" class="logo">
                     <img alt="Logo" src="{{asset('public/assets1/img/logo-xx.png')}}" />
-                    <span>MyDoor</span>
+                    <span>UBERIZE GATE</span>
                 </a>
             </div>
 
@@ -91,7 +91,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
                             <!-- item-->
                             <div class="dropdown-item noti-title">
                                 <h5 class="text-overflow">
-                                    <small>Hello, <?php echo isset(Auth::guard('admin')->user()->name) ? Auth::guard('admin')->user()->name : 'MyDoor';?></small>
+                                    <small>Hello, <?php echo isset(Auth::guard('admin')->user()->name) ? Auth::guard('admin')->user()->name : 'UBERIZE GATE';?></small>
                                 </h5>
                             </div>
 

@@ -28,7 +28,7 @@
                         <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
                             <div class="card-box noradius noborder bg-danger">
                                 <i class="far fa-user float-right text-white"></i>
-                                <h6 class="text-white text-uppercase m-b-20">All Approved Users</h6>
+                                <a href="{{route('admin.flatowners.index')}}"><h6 class="text-white text-uppercase m-b-20">All Approved Users</h6></a>
                                 <h1 class="m-b-20 text-white counter">{{$usercount ?? 0}}</h1>
                                
                             </div>
@@ -37,7 +37,7 @@
                         <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
                             <div class="card-box noradius noborder bg-purple">
                                 <i class="fa fa-home float-right text-white"></i>
-                                <h6 class="text-white text-uppercase m-b-20">All Approved Society</h6>
+                               <a href="{{route('admin.society.index')}}"> <h6 class="text-white text-uppercase m-b-20">All Approved Society</h6></a>
                                 <h1 class="m-b-20 text-white counter">{{$societiescount ?? 0}}</h1>
                               
                             </div>
@@ -46,7 +46,7 @@
                         <div class="col-xs-12 col-md-6 col-lg-6 col-xl-3">
                             <div class="card-box noradius noborder bg-warning">
                                 <i class="fa fa-comments float-right text-white"></i>
-                                <h6 class="text-white text-uppercase m-b-20">Open Complaints</h6>
+                                <a href="{{route('admin.complaints.index')}}"><h6 class="text-white text-uppercase m-b-20">Open Complaints</h6></a>
                                 <h1 class="m-b-20 text-white counter">{{$complaints ?? 0}}</h1>
                               
                             </div>
