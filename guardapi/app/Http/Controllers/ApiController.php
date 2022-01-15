@@ -44,8 +44,8 @@ class ApiController extends Controller
 {
 
 
- public function __construct()
- {
+   public function __construct()
+   {
     $this->user = new User;
     date_default_timezone_set("Asia/Kolkata");  
     $this->url = env('BASE_URL');
@@ -134,13 +134,13 @@ private function send_message($mobile,$message)
 
 public function send_otp(Request $request)
 {
-   $validator =  Validator::make($request->all(), [
-     'mobile' => 'required',
- ]);
+ $validator =  Validator::make($request->all(), [
+   'mobile' => 'required',
+]);
 
-   $status = 'new';
+ $status = 'new';
 
-   if ($validator->fails()) {
+ if ($validator->fails()) {
 
     return response()->json([
         'result' => 'failure',
@@ -175,13 +175,13 @@ return response()->json([
 }
 
 public function verify_otp(Request $request){
- $validator =  Validator::make($request->all(), [
-     'mobile' => 'required',
-     'otp'=>'required',
+   $validator =  Validator::make($request->all(), [
+       'mobile' => 'required',
+       'otp'=>'required',
 
- ]);
+   ]);
 
- if ($validator->fails()) {
+   if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
 
@@ -198,7 +198,7 @@ if(!empty($mobile)){
 }
 
 if(!empty($verify_otp)){
- return response()->json([
+   return response()->json([
     'result' => true,
     'message' => 'OTP Varified SuccessFully',
 ],200);
@@ -246,17 +246,17 @@ public function loginWithPassword(Request $request)
 
     $user_detail = User::Where('email',$email)->where('status',1)->where('is_approve',1)->first();
     if(!empty($user_detail)){
-     $pass_check =  Hash::check($request->password, $user_detail->password);
-     if($pass_check){
+       $pass_check =  Hash::check($request->password, $user_detail->password);
+       if($pass_check){
         $user  = User::Where('email',$email)->first();
     }
 }
 
 if (!empty($user)) {
- $status = 'old';
- if($user->photo!=='' && $user->photo!=null){
-  $user->photo =  asset('public/images/'.$user->photo);
-}
+   $status = 'old';
+   if($user->photo!=='' && $user->photo!=null){
+      $user->photo =  asset('public/images/'.$user->photo);
+  }
 }
 try {
     if (!empty($user)) {
@@ -271,7 +271,7 @@ try {
         }
     } 
     else{ 
-     return response()->json([
+       return response()->json([
         'result' => false,
         'status' =>$status,
         'message' => 'Invalid credentials',
@@ -279,7 +279,7 @@ try {
         'type' => $type,
 
         'user' => $user], 200);
- } 
+   } 
 }
 
 catch (JWTException $e) {
@@ -376,11 +376,11 @@ public function logout(Request $request)
 
 
 public function update_profile(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
-   $user = null; 
-   if ($validator->fails()) {
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -416,31 +416,31 @@ if(!empty($request->city_id)){
 
 
 if($request->hasFile('document')){
- $file = $request->file('document');
+   $file = $request->file('document');
 
- $destinationPath = public_path("/uploads/images/documents");
+   $destinationPath = public_path("/uploads/images/documents");
 
- $side1 = $request->file('document');
+   $side1 = $request->file('document');
 
- $side_name1 = $user->id.'_guard_document'.time().'.'.$side1->getClientOriginalExtension();
+   $side_name1 = $user->id.'_guard_document'.time().'.'.$side1->getClientOriginalExtension();
 
- $side1->move($destinationPath, $side_name1);
+   $side1->move($destinationPath, $side_name1);
 
- $dbArray['document'] = $side_name1;
+   $dbArray['document'] = $side_name1;
 }
 
 if($request->hasFile('photo')){
- $file = $request->file('photo');
+   $file = $request->file('photo');
 
- $destinationPath = public_path("/uploads/images");
+   $destinationPath = public_path("/uploads/images");
 
- $side = $request->file('photo');
+   $side = $request->file('photo');
 
- $side_name = $user->id.'_guard_profile'.time().'.'.$side->getClientOriginalExtension();
+   $side_name = $user->id.'_guard_profile'.time().'.'.$side->getClientOriginalExtension();
 
- $side->move($destinationPath, $side_name);
+   $side->move($destinationPath, $side_name);
 
- $dbArray['photo'] = $side_name;
+   $dbArray['photo'] = $side_name;
 }
 
 
@@ -450,7 +450,7 @@ $user = User::where('id',$user->id)->first();
 if(!empty($user) && !empty($user->photo)){
     $user->photo= $this->url.'guardapi/public/uploads/images/'.$user->photo;
 }else{
-   $user->photo= $this->url.'guardapi/public/uploads/images/man.png';
+ $user->photo= $this->url.'guardapi/public/uploads/images/man.png';
 }
 
 if(!empty($user) && !empty($user->document)){
@@ -491,10 +491,10 @@ public function profile(Request $request){
     if(!empty($user) && !empty($user->photo)){
         $user->photo= $this->url.'guardapi/public/uploads/images/'.$user->photo;
     }else{
-       $user->photo= $this->url.'guardapi/public/uploads/images/user.png';
-   }
+     $user->photo= $this->url.'guardapi/public/uploads/images/user.png';
+ }
 
-   return response()->json([
+ return response()->json([
     'result' => true,
     'message' => 'User Profile',
     'user'=>$user,
@@ -551,12 +551,12 @@ public function state_city_list(Request $request){
 }
 
 public function society_list(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
-   $list = null;
-   $user = null; 
-   if ($validator->fails()) {
+ $list = null;
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -590,13 +590,13 @@ return response()->json([
 }
 
 public function cmspages(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'type' => 'required',
 ]);
-   $pages = null;
-   $user = null; 
-   if ($validator->fails()) {
+ $pages = null;
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -657,14 +657,14 @@ return response()->json([
 
 
 public function get_blocks_list(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 
 
 ]);
-   $blocks_list = null;
-   $user = null; 
-   if ($validator->fails()) {
+ $blocks_list = null;
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => false,
         'message' => json_encode($validator->errors()),
@@ -692,14 +692,14 @@ return response()->json([
 
 
 public function get_flats_list(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'block_id' => 'required',
 
 ]);
-   $flats_list = null;
-   $user = null; 
-   if ($validator->fails()) {
+ $flats_list = null;
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => false,
         'message' => json_encode($validator->errors()),
@@ -776,13 +776,13 @@ public function notification_list(Request $request){
 
 
 public function chats(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'eventId' => 'required',
 ]);
-   $chats = array();
-   $user = null; 
-   if ($validator->fails()) {
+ $chats = array();
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -836,13 +836,13 @@ return response()->json([
 
 
 public function chatSubmit(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'eventId' => 'required',
     'text' => 'required',
 ]);
-   $user = null; 
-   if ($validator->fails()) {
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -879,13 +879,13 @@ return response()->json([
 
 
 public function residence_details(Request $request){
- $validator =  Validator::make($request->all(), [
+   $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'block_id' => 'required',
 ]);
- $flats = null;
- $user = null; 
- if ($validator->fails()) {
+   $flats = null;
+   $user = null; 
+   if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -950,7 +950,7 @@ public function service_list(Request $request){
     $services = Services::where('society_id',$society_id)->where('status',1)->get();
     if(!empty($services)){
         foreach($services as $ser){
-           if(!empty($ser->image)){
+         if(!empty($ser->image)){
             $ser->image = $this->url.'storage/app/public/services/'.$ser->image;
         }
         $service_user = ServiceUsers::where('service_id',$ser->id)->get();
@@ -1004,18 +1004,18 @@ public function service_details(Request $request){
         if(!empty($details)){
             foreach($details as $det){
                 if(!empty($det->image)){
-                 $det->image = $this->url.'storage/app/public/servicedetails/'.$det->image;
-             }
+                   $det->image = $this->url.'storage/app/public/servicedetails/'.$det->image;
+               }
 
-         }
-     }
-
-
- }
+           }
+       }
 
 
+   }
 
- return response()->json([
+
+
+   return response()->json([
     'result' => true,
     'message' => 'Services Details List',
     'services'=>$details,
@@ -1025,12 +1025,12 @@ public function service_details(Request $request){
 
 
 public function get_guards(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
 
-   $user = null; 
-   if ($validator->fails()) {
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1056,14 +1056,14 @@ return response()->json([
 
 
 public function verified_entry(Request $request){
- $validator =  Validator::make($request->all(), [
+   $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'otp' => 'required',
     'type'=>'',
 ]);
 
- $user = null; 
- if ($validator->fails()) {
+   $user = null; 
+   if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1122,12 +1122,12 @@ else{
 
 
 public function visitors_list(Request $request){
- $validator =  Validator::make($request->all(), [
+   $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
 
- $user = null; 
- if ($validator->fails()) {
+   $user = null; 
+   if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1170,15 +1170,17 @@ return response()->json([
 
 
 public function add_multivisitor_entry(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
     'contactName' => 'required',
     'contactNumber' => 'required',
     'jsonData' => 'required',
 ]);
 
-   $user = null; 
-   if ($validator->fails()) {
+// DB::table('new')->insert(['text'=>json_encode($request->toArray())]);
+// die;
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1195,12 +1197,12 @@ if (empty($user)){
 
 $photo ='';
 if($request->hasFile('user_image')){
- $file = $request->file('user_image');
- $destinationPath = public_path("/uploads/images/visitors/");
- $side = $request->file('user_image');
- $side_name = $user->id.'_guard_visitor'.time().'.'.$side->getClientOriginalExtension();
- $side->move($destinationPath, $side_name);
- $photo = $side_name;
+   $file = $request->file('user_image');
+   $destinationPath = public_path("/uploads/images/visitors/");
+   $side = $request->file('user_image');
+   $side_name = $user->id.'_guard_visitor'.time().'.'.$side->getClientOriginalExtension();
+   $side->move($destinationPath, $side_name);
+   $photo = $side_name;
 }
 
 $jsondata = json_decode($request->jsonData);
@@ -1216,7 +1218,7 @@ $insertArr = [];
 //$success = $this->send_notification($title, $body, $deviceToken,$type);
 //
 
-
+     // print_r($jsondata);
 
 if(!empty($jsondata)){
 
@@ -1225,16 +1227,15 @@ if(!empty($jsondata)){
     $dbArray1['society_id'] = $user->society_id;
 
     $dbArray1['phone'] = $request->contactNumber;
-    $dbArray1['category'] = $request->category;
-    $dbArray1['sub_category'] = $request->sub_category;
+    $dbArray1['category'] = $request->category ?? '';
+    $dbArray1['sub_category'] = $request->sub_category ?? '';
 
     $vis_id = DB::table('guard_visitor_info')->insertGetId($dbArray1);
 
 
     foreach ($jsondata as $key) {
-
-
-
+        // print_r($key);
+        // die;
         $dbArray = [];
         $dbArray['society_id'] = $user->society_id;
         $dbArray['name'] = $request->contactName;
@@ -1242,6 +1243,8 @@ if(!empty($jsondata)){
         $dbArray['image'] = $photo ?? '';
         $dbArray['entry_at'] = date('Y-m-d H:i:s');
         $dbArray['block_id'] = $key->blockId;
+        $dbArray['category'] = $request->category;
+        $dbArray['sub_category'] = $request->sub_category;
         $dbArray['vis_id'] = $vis_id;
         $flat_no = $key->flat_no;
 
@@ -1254,49 +1257,58 @@ if(!empty($jsondata)){
         ////////Send Notification
         $notArr = [];
         $users = SocietyUser::where('flat_no',$flat->id)->get();
-
-
-
-
-
-
-
-
-
-
-
-
         if(!empty($users)){
-         foreach($users as $user){
-             $user_login = DB::table('user_logins')->where('user_id',$user->id)->get();
-             if(!empty($user_login)){
-                 foreach($user_login as $login){
-                     $title = $request->sub_category ?? 'A Visitor Wait At Gate';
-                     $body = ['id'=>$id,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$image];
-                     $deviceToken = $login->deviceToken;
+           foreach($users as $user){
+               $user_login = DB::table('user_logins')->where('user_id',$user->id)->get();
+               if(!empty($user_login)){
+                   foreach($user_login as $login){
+                       $title = $request->sub_category ?? 'A Visitor Wait At Gate';
+                       $body = ['id'=>$id,'name'=>$request->contactName,'phone'=>$request->contactNumber,'image'=>$image,'category'=>$request->category,'sub_category'=>$request->sub_category];
+                       $deviceToken = $login->deviceToken;
                              //$deviceToken = 'dhIxAONPT3y9ZrC9mfiYXD:APA91bEmU7H_nC3eJzk5BzX6AzZB6ryyhcXgbG52styw64_GWPj-rT87kpBLU3EmJwBT3Trniyyz0KT-EkiLex0F4Ot-6u9oVbABQmgpv0ztc0MdqkatX37swtFhtasqmdBCv_2OrOQT';
-                     $type = 'incomming_request';
-
-                     $success = $this->send_notification($title, $body, $deviceToken,$type);
-                     if($success){
-                         $dbArray = [];
-                         $dbArray['user_id'] = $login->user_id;
-                         $dbArray['text'] = $title??'';
-                         $dbArray['title'] = $title ?? '';
-                         DB::table('notifications')->insert($dbArray);
-
-                     }
-
-                 }
-             }
+                       $type = 'visitorRequest';
+                       if($request->category == 'Cab'){
+                        $type = 'cabRequest';
+                    }if($request->category == 'Delivery'){
+                        $type = 'deliveryRequest';
+                        
+                    }
 
 
-         }
-     }
+                     // if($)
+
+
+                    $success = $this->send_notification($title, $body, $deviceToken,$type);
+                    if($success){
+                       $dbArray = [];
+                       $dbArray['user_id'] = $login->user_id;
+                       $dbArray['text'] = $title??'';
+                       $dbArray['title'] = $title ?? '';
+                       DB::table('notifications')->insert($dbArray);
+
+                   }
+
+               }
+           }
+
+
+       }
+       return response()->json([
+        'result' => true,
+        'message' => 'Visitors Added SuccessFully',
+
+    ],200);
+   }else{
+    return response()->json([
+        'result' => true,
+        'message' => 'No User Found',
+
+    ],200);
+}
 
 
 
- }
+}
 }
 
 
@@ -1304,11 +1316,7 @@ if(!empty($jsondata)){
 
 
 
-return response()->json([
-    'result' => true,
-    'message' => 'Visitors Added SuccessFully',
 
-],200);
 
 }
 
@@ -1375,12 +1383,12 @@ public function fcmNotification($device_id, $sendData)
 
 
 public function all_visitors_list(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
-   $chats = array();
-   $user = null; 
-   if ($validator->fails()) {
+ $chats = array();
+ $user = null; 
+ if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1396,8 +1404,8 @@ if (empty($user)){
 } 
 $visitors = [];
 
-$visitors = DB::table('guard_visitors')->select('id','name','phone','image','created_at','is_approve','approved_by','entry_at','exit_at')->where('society_id',$user->society_id)->where('is_approve',1)->latest()->groupBy('vis_id')->paginate(10);
-
+$visitors = DB::table('guard_visitors')->select('id','name','phone','image','created_at','is_approve','approved_by','entry_at','exit_at')->where('society_id',$user->society_id)->latest()->groupBy('vis_id')->paginate(10);
+// ->where('is_approve',1)
 if(!empty($visitors)){
     foreach($visitors as $vis){
 
@@ -1516,12 +1524,12 @@ public function get_chats(Request $request){
 
 
 public function vehicle_list(Request $request){
- $validator =  Validator::make($request->all(), [
+   $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
- $vehicles = array();
- $user = null; 
- if ($validator->fails()) {
+   $vehicles = array();
+   $user = null; 
+   if ($validator->fails()) {
     return response()->json([
         'result' => 'failure',
         'message' => json_encode($validator->errors()),
@@ -1658,11 +1666,11 @@ public function emergency_nos(Request $request){
 
 
 public function sub_category_list(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
-   $user = null;
-   if ($validator->fails()) {
+ $user = null;
+ if ($validator->fails()) {
     return response()->json([
         'result' => false,
         'message' => json_encode($validator->errors()),
@@ -1719,11 +1727,11 @@ return response()->json([
 
 
 public function staff_list(Request $request){
-   $validator =  Validator::make($request->all(), [
+ $validator =  Validator::make($request->all(), [
     'token' => 'required',
 ]);
-   $user = null;
-   if ($validator->fails()) {
+ $user = null;
+ if ($validator->fails()) {
     return response()->json([
         'result' => false,
         'message' => json_encode($validator->errors()),
@@ -1770,9 +1778,9 @@ if(!empty($staffs)){
                 }
 
 
-             }
-             $staff->present = $present;
-             if(!empty($staff->image)){
+            }
+            $staff->present = $present;
+            if(!empty($staff->image)){
                 $staff->image = $this->url.'/public/storage/service_user/'.$staff->image;
             }
 
@@ -1837,47 +1845,47 @@ public function in_out_staff(Request $request){
     if($request->type == 'IN'){
         $exist = StaffAttendance::where('staff_id',$staff->id)->where('date',date('Y-m-d'))->first();
         if(empty($exist)){
-           $dbArray = [];
-           $dbArray['staff_id'] = $request->staff_id;
-           $dbArray['date'] = date('Y-m-d');
-           $dbArray['in_time'] = date('h:i');
-           StaffAttendance::insert($dbArray);
+         $dbArray = [];
+         $dbArray['staff_id'] = $request->staff_id;
+         $dbArray['date'] = date('Y-m-d');
+         $dbArray['in_time'] = date('h:i');
+         StaffAttendance::insert($dbArray);
 
-           return response()->json([
+         return response()->json([
             'result' => true,
             'message' => 'CheckIn Succesfully',
         ],200); 
 
-       }else{
-         return response()->json([
-            'result' => false,
-            'message' => 'Already CheckIn',
-        ],200); 
-     }
- }
- if($request->type == 'OUT'){
+     }else{
+       return response()->json([
+        'result' => false,
+        'message' => 'Already CheckIn',
+    ],200); 
+   }
+}
+if($request->type == 'OUT'){
     $exist = StaffAttendance::where('staff_id',$staff->id)->where('date',date('Y-m-d'))->where('in_time','!=',NULL)->first();
     if(!empty($exist)){
         if($exist->out_time == '' || $exist->out_time == NULL){
-           StaffAttendance::where('id',$exist->id)->update(['out_time'=>date('h:i')]);
-                return response()->json([
-                    'result' => true,
-                    'message' => 'CheckOut Succesfully',
-                ],200); 
-            }else{
-                return response()->json([
-                    'result' => false,
-                    'message' => 'Already CheckOut',
-                ],200);  
-            }
-        
-    }else{
+         StaffAttendance::where('id',$exist->id)->update(['out_time'=>date('h:i')]);
+         return response()->json([
+            'result' => true,
+            'message' => 'CheckOut Succesfully',
+        ],200); 
+     }else{
+        return response()->json([
+            'result' => false,
+            'message' => 'Already CheckOut',
+        ],200);  
+    }
 
-       return response()->json([
-        'result' => false,
-        'message' => 'Please Check In First',
-    ],200);
-   }   
+}else{
+
+ return response()->json([
+    'result' => false,
+    'message' => 'Please Check In First',
+],200);
+}   
 
 }
 
