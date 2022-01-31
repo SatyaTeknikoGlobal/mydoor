@@ -5,15 +5,17 @@ $ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
 $role_id = Auth::guard('admin')->user()->role_id;
 $admin_society_id = Auth::guard('admin')->user()->society_id;
 
-$blocke_id = (isset($blockes->id))?$blockes->id:'';
-$name = (isset($blockes->name))?$blockes->name:'';
-$society_id = (isset($blockes->society_id))?$blockes->society_id:'';
-$status = (isset($blockes->status))?$blockes->status:'';
+$notices_id = (isset($notices->id))?$notices->id:'';
+$society_id = (isset($notices->society_id))?$notices->society_id:'';
+$title = (isset($notices->title))?$notices->title:'';
+$description = (isset($notices->description))?$notices->description:'';
+$status = (isset($notices->status))?$notices->status:'';
 
 
-$routeName = CustomHelper::getSadminRouteName();
+
+
 $storage = Storage::disk('public');
-$path = 'influencer/';
+$path = 'notice_board/';
 
 ?>
 
@@ -60,7 +62,7 @@ $path = 'influencer/';
                          <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data" role="form">
                             {{ csrf_field() }}
 
-                            <input type="hidden" name="id" value="{{$blocke_id}}">
+                            <input type="hidden" name="id" value="{{$notices_id}}">
 
 
 
@@ -87,11 +89,19 @@ $path = 'influencer/';
 
 
                             <div class="form-group">
-                                <label for="userName">Name<span class="text-danger">*</span></label>
-                                <input type="text" name="name" value="{{ old('name', $name) }}" id="name" class="form-control"  maxlength="255" />
+                                <label for="userName">Title<span class="text-danger">*</span></label>
+                                <input type="text" name="title" value="{{ old('title', $title) }}" id="title" class="form-control"  maxlength="255" />
 
-                                @include('snippets.errors_first', ['param' => 'name'])
+                                @include('snippets.errors_first', ['param' => 'title'])
                             </div>
+
+
+                             <div class="form-group">
+                                <label for="userName">Description<span class="text-danger">*</span></label>
+                                <textarea name="description" id="description" class="form-control">{{old('description',$description)}}</textarea>
+                                @include('snippets.errors_first', ['param' => 'description'])
+                            </div>
+
 
                             
                        <div class="form-group">

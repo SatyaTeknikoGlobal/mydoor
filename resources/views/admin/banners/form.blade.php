@@ -5,9 +5,10 @@ $ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
 $role_id = Auth::guard('admin')->user()->role_id;
 $admin_society_id = Auth::guard('admin')->user()->society_id;
 
-$blocke_id = (isset($blockes->id))?$blockes->id:'';
-$name = (isset($blockes->name))?$blockes->name:'';
-$society_id = (isset($blockes->society_id))?$blockes->society_id:'';
+$banner_id = (isset($banners->id))?$banners->id:'';
+$title = (isset($banners->title))?$banners->title:'';
+$society_id = (isset($banners->society_id))?$banners->society_id:'';
+$image = (isset($banners->image))?$banners->image:'';
 $status = (isset($blockes->status))?$blockes->status:'';
 
 
@@ -60,7 +61,7 @@ $path = 'influencer/';
                          <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data" role="form">
                             {{ csrf_field() }}
 
-                            <input type="hidden" name="id" value="{{$blocke_id}}">
+                            <input type="hidden" name="id" value="{{$banner_id}}">
 
 
 
@@ -87,10 +88,17 @@ $path = 'influencer/';
 
 
                             <div class="form-group">
-                                <label for="userName">Name<span class="text-danger">*</span></label>
-                                <input type="text" name="name" value="{{ old('name', $name) }}" id="name" class="form-control"  maxlength="255" />
+                                <label for="userName">Title<span class="text-danger">*</span></label>
+                                <input type="text" name="title" value="{{ old('title', $title) }}" id="name" class="form-control"  maxlength="255" />
 
-                                @include('snippets.errors_first', ['param' => 'name'])
+                                @include('snippets.errors_first', ['param' => 'title'])
+                            </div>
+
+                              <div class="form-group">
+                                <label for="userName">Title<span class="text-danger">*</span></label>
+                                <input type="file" name="image" value="{{ old('image', $image) }}" id="image" class="form-control"  maxlength="255" />
+
+                                @include('snippets.errors_first', ['param' => 'image'])
                             </div>
 
                             

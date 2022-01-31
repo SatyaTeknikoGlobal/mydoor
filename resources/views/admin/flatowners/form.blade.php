@@ -2,6 +2,8 @@
 <?php
 $BackUrl = CustomHelper::BackUrl();
 $ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
+$role_id = Auth::guard('admin')->user()->role_id;
+$admin_society_id = Auth::guard('admin')->user()->society_id;
 
 
 $flatowners_id = (isset($flatowners->id))?$flatowners->id:'';
@@ -16,6 +18,7 @@ $location = (isset($flatowners->location))?$flatowners->location:'';
 $gender = (isset($flatowners->gender))?$flatowners->gender:'';
 $state_id = (isset($flatowners->state_id))?$flatowners->state_id:'';
 $city_id = (isset($flatowners->city_id))?$flatowners->city_id:'';
+$flat_cat_id = (isset($flatowners->flat_cat_id))?$flatowners->flat_cat_id:'';
 
 
 
@@ -69,7 +72,7 @@ $path = 'influencer/';
                             {{ csrf_field() }}
 
                             <input type="hidden" name="id" value="{{$flatowners_id}}">
-
+                            <?php if($role_id == 0){?>
                             <div class="form-group">
                                 <label for="userName">Society Name<span class="text-danger">*</span></label>
                                 <select name="society_id" id="society_id" class="form-control select2">
@@ -84,7 +87,10 @@ $path = 'influencer/';
 
                                 @include('snippets.errors_first', ['param' => 'society_id'])
                             </div>
+                        <?php }else{?>
+                            <input type="hidden" name="society_id" value="{{$admin_society_id}}">
 
+                        <?php }?>
 
                             <div class="form-group">
                                 <label for="userName">Block Name<span class="text-danger">*</span></label>
@@ -120,6 +126,16 @@ $path = 'influencer/';
                             </div>
 
 
+
+                            <div class="form-group">
+                                <label for="userName">Flat Category<span class="text-danger">*</span></label>
+                                <select name="flat_cat_id" id="flat_cat_id" class="form-control select2">
+                                 <option value="" selected disabled>Select Flat Category</option>
+
+                                </select>
+
+                                @include('snippets.errors_first', ['param' => 'flat_cat_id'])
+                            </div>
 
 
 
@@ -255,6 +271,32 @@ $path = 'influencer/';
         });
 
     });
+
+
+
+
+
+    $('#society_id').change(function() {
+        var society_id = $(this).val();
+        var _token = '{{ csrf_token() }}';
+
+        $.ajax({
+            url: "{{ route($routeName.'.flats.get_flat_cat_from_society') }}",
+            type: "POST",
+            data: {society_id:society_id},
+            dataType:"HTML",
+            headers:{'X-CSRF-TOKEN': _token},
+            cache: false,
+            success: function(resp){
+                $('#flat_cat_id').html(resp);
+            }
+        });
+
+    });
+
+
+
+
 
 
     $('#block_id').change(function() {

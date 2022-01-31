@@ -1,14 +1,5 @@
 @include('admin.common.header')
 
-<?php
-$BackUrl = CustomHelper::BackUrl();
-$ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
-$routeName = CustomHelper::getAdminRouteName();
-$storage = Storage::disk('public');
-$path = 'category/';
-?>
-
-
 
 
 
@@ -53,28 +44,14 @@ $path = 'category/';
 
                          
                             <div class="form-group">
-                                <label for="userName">Privacy<span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="privacy" name="privacy">{{$settings->privacy ?? ''}}</textarea>
-                                @include('snippets.errors_first', ['param' => 'privacy'])
+                                <label for="userName">File<span class="text-danger">*</span></label>
+                                <input class="form-control" id="file" type="file" name="file">
+                                @include('snippets.errors_first', ['param' => 'file'])
                             </div>
 
 
 
-                            <div class="form-group">
-                                <label for="userName">Terms & Condition<span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="terms" name="terms">{{$settings->terms ?? ''}}</textarea>
-                                @include('snippets.errors_first', ['param' => 'terms'])
-                            </div>
-
-
-  
-                            <div class="form-group">
-                                <label for="userName">About<span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="about" name="about">{{$settings->about ?? ''}}</textarea>
-                                @include('snippets.errors_first', ['param' => 'about'])
-                            </div>
-
-
+                            
                    
 
                  <div class="form-group text-right m-b-0">
@@ -93,6 +70,26 @@ $path = 'category/';
 
 </div>
 
+
+<textarea class="form-control">
+    {{$html ?? ''}}
+</textarea>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 <!-- END container-fluid -->
 
@@ -109,17 +106,6 @@ $path = 'category/';
 
 
   @include('admin.common.footer')
-
- <script>
-             CKEDITOR.replace( 'privacy' );
-              CKEDITOR.replace( 'terms' );
-              CKEDITOR.replace( 'about' );
-
-              
-   
-
-
-          </script>
 
 
 <script>

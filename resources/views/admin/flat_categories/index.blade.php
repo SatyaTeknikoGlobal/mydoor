@@ -21,10 +21,10 @@ $roleId = Auth::guard('admin')->user()->role_id;
       <div class="row">
         <div class="col-xl-12">
           <div class="breadcrumb-holder">
-            <h1 class="main-title float-left">Blocks</h1>
+            <h1 class="main-title float-left">Flat Categories</h1>
             <ol class="breadcrumb float-right">
               <li class="breadcrumb-item">Home</li>
-              <li class="breadcrumb-item active">Blocks</li>
+              <li class="breadcrumb-item active">Flat Categories</li>
             </ol>
             <div class="clearfix"></div>
           </div>
@@ -38,10 +38,10 @@ $roleId = Auth::guard('admin')->user()->role_id;
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card mb-3">
             <div class="card-header">
-              <h3>Blocks List</h3>
-              @if(CustomHelper::isAllowedSection('blockes' , $roleId , $type='add'))
+              <h3>Flat Categories List</h3>
+              @if(CustomHelper::isAllowedSection('flat_categories' , $roleId , $type='add'))
               <span class="pull-right">
-                  <a href="{{ route($routeName.'.blockes.add', ['back_url'=>$BackUrl]) }}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus" aria-hidden="true"></i> Add New Block</a>
+                  <a href="{{ route($routeName.'.flat_categories.add', ['back_url'=>$BackUrl]) }}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus" aria-hidden="true"></i> Add New Flat</a>
               </span>
               @endif
             </div>
@@ -52,15 +52,51 @@ $roleId = Auth::guard('admin')->user()->role_id;
                   <thead>
                     <tr>
                      <th scope="col">#ID</th>
-                     <th scope="col">Name</th>
                      <th scope="col">Society Name</th>
-
-                     <th scope="col">Added By</th>
+                     <th scope="col">Name</th>
+                     <th scope="col">Sq. Feet</th>
+                     <th scope="col">Maintainance Cost</th>
                      <th scope="col">Status</th>
                      <th scope="col">Date Created</th>
                      <th scope="col">Action</th>
                    </tr>
                  </thead>
+                 <tbody>
+                  <?php if(!empty($categories)){
+                    foreach($categories as $cat){
+                    ?>
+
+                   <tr>
+                     <td>{{$cat->id}}</td>
+                     <td>
+                      <?php  
+                      $society = \App\Society::where('id',$cat->society_id)->first();
+                      echo $society->name ?? '';
+                      ?>
+                     </td>
+                     <td>{{$cat->name}}</td>
+                     <td>{{$cat->square_feet}}</td>
+                     <td>{{$cat->maintainance_fee}}</td>
+                     <td>
+
+                      <?php 
+                      if($cat->status == 1){
+                        echo "Active";
+                      }else{
+                        echo "InActive";
+                      }
+                      ?>
+
+
+                     </td>
+                     <td>{{$cat->created_at}}</td>
+                     <td>
+                       <a title="Edit" href="{{route($routeName.'.flat_categories.edit',$cat->id.'?back_url='.$BackUrl)}}"><i class="fa fa-edit">Edit</i></a>
+                     </td>
+                   </tr>
+
+                 <?php }}?>
+                 </tbody>
                </table>
              </div>
              <!-- end table-responsive-->
@@ -89,52 +125,3 @@ $roleId = Auth::guard('admin')->user()->role_id;
 
 @include('admin.common.footer')
 
-<script>
-  var i = 1;
-
-  var table = $('#dataTable').DataTable({
-   ordering: false,
-   processing: true,
-   serverSide: true,
-   ajax: '{{ route($routeName.'.blockes.get_blocks') }}',
-   columns: [
-   { data: 'id', name: 'id' },
-   { data: 'name', name: 'name' ,searchable: false, orderable: false},
-   { data: 'society_id', name: 'society_id' ,searchable: false, orderable: false},
-   
-   { data: 'added_by', name: 'added_by'},
-   { data: "status",name: 'status'},
-   { data: 'created_at', name: 'created_at' },
-   { data: 'action', searchable: false, orderable: false }
-
-   ],
-});
-
-function change_block_status(block_id){
-  var status = $('#change_block_status'+block_id).val();
-
-
-   var _token = '{{ csrf_token() }}';
-
-            $.ajax({
-                url: "{{ route($routeName.'.blockes.change_block_status') }}",
-                type: "POST",
-                data: {block_id:block_id, status:status},
-                dataType:"JSON",
-                headers:{'X-CSRF-TOKEN': _token},
-                cache: false,
-                success: function(resp){
-                    if(resp.success){
-                      alert(resp.message);
-                    }else{
-                      alert(resp.message);
-                      
-                    }
-                }
-            });
-
-
-}
-
-
-</script>

@@ -20,7 +20,9 @@
 <script src="{{asset('public/assets/js/fastclick.js')}}"></script>
 <script src="{{asset('public/assets/js/jquery.blockUI.js')}}"></script>
 <script src="{{asset('public/assets/js/jquery.nicescroll.js')}}"></script>
-<script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+ <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+
+<!-- <script src="https://cdn.ckeditor.com/ckeditor5/31.0.0/classic/ckeditor.js"></script> -->
 
 <!-- App js -->
 <script src="{{asset('public/assets/js/admin.js')}}"></script>

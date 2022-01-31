@@ -368,6 +368,7 @@ public function info(Request $request){
         $rules['title'] = 'required';
         $rules['number'] = 'required';
         $rules['society_id'] = 'required';
+        $rules['category_id'] = 'required';
 
         $this->validate($request,$rules);
 
@@ -375,6 +376,7 @@ public function info(Request $request){
         $dbArray = [];
         $dbArray['society_id'] = $request->society_id;
         $dbArray['title'] = $request->title;
+        $dbArray['category_id'] = $request->category_id;
         $dbArray['number'] = $request->number;
         $dbArray['status'] = 1;
 

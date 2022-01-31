@@ -18,6 +18,21 @@
     <link rel="stylesheet" href="{{asset('public/assets1/css/app.css')}}" type="text/css"/>
   </head>
 
+
+  <style type="text/css">
+    .splash-description {
+    text-align: center;
+    display: block;
+    line-height: 20px;
+    font-size: 33px;
+    font-weight: 500;
+    /*border-bottom: 1px solid;*/
+    color: #1490c3;
+    margin-top: 36px;
+    padding-bottom: 20px;
+}
+  </style>
+
   @include('snippets.errors')
   @include('snippets.flash')
 <body class="be-splash-screen">
@@ -25,8 +40,9 @@
       <div class="be-content">
         <div class="main-content container-fluid">
           <div class="splash-container">
-            <div class="card card-border-color card-border-color-primary">
-              <div class="card-header"><img class="logo-img" src="{{asset('public/assets1/img/logo-xx.png')}}" alt="logo" width="{conf.logoWidth}" height="200" width="200"><span class="splash-description">Admin Login</span></div>
+            <!-- <div class="card card-border-color card-border-color-primary"> -->
+            <div>
+              <div class="card-header"><img class="logo-img" src="{{asset('public/assets1/img/logo-xx.png')}}" alt="logo" width="{conf.logoWidth}" height="175" width="175"><span class="splash-description">Admin Login</span></div>
               <div class="card-body">
                 <form action="{{url('admin/login')}}" method="post">
                 {!! csrf_field() !!}

@@ -35,6 +35,16 @@ return [
         'cash' => 'Cash',
     ],
 
+       'directoryArr' =>[
+        '1'=>'Resident Directory',
+        '2'=>'Service Directory',
+        '3'=>'Society Committee',
+        '4'=>'Emergency Directory',
+        '5'=>'Guards Directory',
+    ],
+
+    
+
     'img_extension' => ['jpg', 'jpeg', 'gif', 'png', 'JPG', 'JPEG', 'GIF', 'PNG'],
 
     'compare_scope' => [

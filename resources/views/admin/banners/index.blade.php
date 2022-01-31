@@ -21,10 +21,10 @@ $roleId = Auth::guard('admin')->user()->role_id;
       <div class="row">
         <div class="col-xl-12">
           <div class="breadcrumb-holder">
-            <h1 class="main-title float-left">Blocks</h1>
+            <h1 class="main-title float-left">Banners</h1>
             <ol class="breadcrumb float-right">
               <li class="breadcrumb-item">Home</li>
-              <li class="breadcrumb-item active">Blocks</li>
+              <li class="breadcrumb-item active">Banners</li>
             </ol>
             <div class="clearfix"></div>
           </div>
@@ -38,10 +38,10 @@ $roleId = Auth::guard('admin')->user()->role_id;
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <div class="card mb-3">
             <div class="card-header">
-              <h3>Blocks List</h3>
-              @if(CustomHelper::isAllowedSection('blockes' , $roleId , $type='add'))
+              <h3>Banners</h3>
+              @if(CustomHelper::isAllowedSection('banners' , $roleId , $type='add'))
               <span class="pull-right">
-                  <a href="{{ route($routeName.'.blockes.add', ['back_url'=>$BackUrl]) }}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus" aria-hidden="true"></i> Add New Block</a>
+                  <a href="{{ route($routeName.'.banners.add', ['back_url'=>$BackUrl]) }}" class="btn btn-primary btn-sm"><i class="fas fa-user-plus" aria-hidden="true"></i> Add New Banner</a>
               </span>
               @endif
             </div>
@@ -52,10 +52,9 @@ $roleId = Auth::guard('admin')->user()->role_id;
                   <thead>
                     <tr>
                      <th scope="col">#ID</th>
-                     <th scope="col">Name</th>
-                     <th scope="col">Society Name</th>
-
-                     <th scope="col">Added By</th>
+                     <th scope="col">Title</th>
+                     <th scope="col">Image</th>
+                     <th scope="col">Society Name</th>                     
                      <th scope="col">Status</th>
                      <th scope="col">Date Created</th>
                      <th scope="col">Action</th>
@@ -96,13 +95,12 @@ $roleId = Auth::guard('admin')->user()->role_id;
    ordering: false,
    processing: true,
    serverSide: true,
-   ajax: '{{ route($routeName.'.blockes.get_blocks') }}',
+   ajax: '{{ route($routeName.'.banners.get_banners') }}',
    columns: [
    { data: 'id', name: 'id' },
-   { data: 'name', name: 'name' ,searchable: false, orderable: false},
-   { data: 'society_id', name: 'society_id' ,searchable: false, orderable: false},
-   
-   { data: 'added_by', name: 'added_by'},
+   { data: 'title', name: 'title' ,searchable: false, orderable: false},
+   { data: 'image', name: 'image'},
+   { data: 'society_id', name: 'society_id' ,searchable: false, orderable: false},   
    { data: "status",name: 'status'},
    { data: 'created_at', name: 'created_at' },
    { data: 'action', searchable: false, orderable: false }
@@ -110,16 +108,16 @@ $roleId = Auth::guard('admin')->user()->role_id;
    ],
 });
 
-function change_block_status(block_id){
-  var status = $('#change_block_status'+block_id).val();
+function change_banner_status(banner_id){
+  var status = $('#change_banner_status'+banner_id).val();
 
 
    var _token = '{{ csrf_token() }}';
 
             $.ajax({
-                url: "{{ route($routeName.'.blockes.change_block_status') }}",
+                url: "{{ route($routeName.'.banners.change_banner_status') }}",
                 type: "POST",
-                data: {block_id:block_id, status:status},
+                data: {banner_id:banner_id, status:status},
                 dataType:"JSON",
                 headers:{'X-CSRF-TOKEN': _token},
                 cache: false,

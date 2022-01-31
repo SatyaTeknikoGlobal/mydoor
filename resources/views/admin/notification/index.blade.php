@@ -45,6 +45,7 @@ $path = 'influencer/thumb/';
             {{csrf_field()}}
             <div class="card-body d-flex">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <label>Select Society</label>
                <select class="form-control select2" name="user_id1">
                 <option value="" selected disabled>Select Society</option>
 
@@ -58,23 +59,53 @@ $path = 'influencer/thumb/';
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <label>Title</label>
+
                 <input type="text" name="title1" value="" placeholder="Enter Title" class="form-control">
               </div>
             </div>
 
 
             <div class="card-body d-flex">
-             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-               <textarea class="form-control" name="text1" placeholder="Enter Description"></textarea>
+             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <label>Description</label>
+
+               <textarea class="form-control" name="text1" id="description" placeholder="Enter Description"></textarea>
              </div>
 
 
 
-             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-              <input type="file" name="image1" class="form-control" value="" placeholder="Enter Amount">
+            
+          </div>
+
+
+
+            <div class="card-body d-flex">
+
+               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <label>Image(JPEG,JPG,PNG)</label>
+
+              <input type="file" name="image1" class="form-control" value="" >
             </div>
 
+
+
+
+             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <label>Any Document(PDF,Xls,CSV)</label>
+               <input class="form-control" type="file" name="documents[]" multiple placeholder="Enter Description">
+             </div>
+
+
           </div>
+
+
+
+
+
+
+
+
 
           <div class="card-body d-flex">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
@@ -93,165 +124,7 @@ $path = 'influencer/thumb/';
 
 
 
- <div class="row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="card mb-3">
-     <div class="card-header">
-      <h3>Send Notification To Block Wise</h3>
-    </div>
-
-    <form method="POST" action="" enctype='multipart/form-data'>
-      {{csrf_field()}}
-      <div class="card-body d-flex">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-         <select class="form-control select2" name="user_id1">
-          <option value="0">All</option>
-        </select>
-      </div>
-
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-        <input type="text" name="title1" value="My Door" placeholder="Enter Title" class="form-control">
-      </div>
-    </div>
-
-
-    <div class="card-body d-flex">
-     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-       <textarea class="form-control" name="text1" placeholder="Enter Description"></textarea>
-     </div>
-
-
-
-     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-      <input type="file" name="image1" class="form-control" value="" placeholder="Enter Amount">
-    </div>
-
-  </div>
-
-  <div class="card-body d-flex">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
-     <button class="btn btn-success">Submit</button>
-
-   </div>
- </div>
-
-</div>
-</form>
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-<div class="row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="card mb-3">
-     <div class="card-header">
-      <h3>Send Notification To Specific User</h3>
-    </div>
-
-    <form method="POST" action="" enctype='multipart/form-data'>
-      {{csrf_field()}}
-      <div class="card-body d-flex">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-         <select class="form-control select2" name="user_id1">
-          <option value="0">All</option>
-        </select>
-      </div>
-
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-        <input type="text" name="title1" value="My Door" placeholder="Enter Title" class="form-control">
-      </div>
-    </div>
-
-
-    <div class="card-body d-flex">
-     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-       <textarea class="form-control" name="text1" placeholder="Enter Description"></textarea>
-     </div>
-
-
-
-     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-      <input type="file" name="image1" class="form-control" value="" placeholder="Enter Amount">
-    </div>
-
-  </div>
-
-  <div class="card-body d-flex">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
-     <button class="btn btn-success">Submit</button>
-
-   </div>
- </div>
-
-</div>
-</form>
-
-</div>
-
-</div>
-
-
-
-
-<div class="row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="card mb-3">
-     <div class="card-header">
-      <h3>Send Notification To Society Guards</h3>
-    </div>
-
-    <form method="POST" action="" enctype='multipart/form-data'>
-      {{csrf_field()}}
-      <div class="card-body d-flex">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-         <select class="form-control select2" name="user_id1">
-          <option value="0">All</option>
-        </select>
-      </div>
-
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-        <input type="text" name="title1" value="My Door" placeholder="Enter Title" class="form-control">
-      </div>
-    </div>
-
-
-    <div class="card-body d-flex">
-     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-       <textarea class="form-control" name="text1" placeholder="Enter Description"></textarea>
-     </div>
-
-
-
-     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
-      <input type="file" name="image1" class="form-control" value="" placeholder="Enter Amount">
-    </div>
-
-  </div>
-
-  <div class="card-body d-flex">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
-     <button class="btn btn-success">Submit</button>
-
-   </div>
- </div>
-
-</div>
-</form>
-
-</div>
-
-</div>
-
-
-
-
+ 
 
 
 
@@ -268,3 +141,8 @@ $path = 'influencer/thumb/';
 
 @include('admin.common.footer')
 
+
+<script type="text/javascript">
+             CKEDITOR.replace( 'description' );
+  
+</script>

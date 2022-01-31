@@ -4,6 +4,9 @@
 $BackUrl = CustomHelper::BackUrl();
 $routeName = CustomHelper::getAdminRouteName();
 
+$role_id = Auth::guard('admin')->user()->role_id;
+$admin_society_id = Auth::guard('admin')->user()->society_id;
+
 
 $storage = Storage::disk('public');
 $path = 'influencer/thumb/';
@@ -43,7 +46,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
 
 
           <div class="card-body d-flex">
-
+            <?php if($role_id == 0){?>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
               <label>Select Society</label>
               <select class="form-control select2" id="society" >
@@ -56,13 +59,17 @@ $roleId = Auth::guard('admin')->user()->role_id;
 
                 </select>
               </div>
-
+            <?php }?>
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                 <label>Select Blocks</label>
                 <select class="form-control select2" id="blocks" >
                   <option value="0" selected="" disabled >Select Blocks</option>
-
+                   <?php if(!empty($blocks)){
+                  foreach($blocks as $block){
+                    ?>
+                    <option value="{{$block->id}}">{{$block->name}}</option>
+                  <?php }}?>
 
                 </select>
 

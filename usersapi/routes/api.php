@@ -40,6 +40,11 @@ Route::get('check_version ', 'ApiController@app_version');
 Route::get('country_list ', 'ApiController@country_list');
 Route::get('language_list ', 'ApiController@language_list');
 Route::get('subcategory_list ', 'ApiController@subcategory_list');
+
+
+Route::get('society_directory_cat ', 'ApiController@society_directory_cat');
+
+
 Route::post('checkUsername ', 'ApiController@checkUsername');
 Route::post('checkEmail ', 'ApiController@checkEmail');
 Route::post('apply_referral_code ', 'ApiController@apply_referral_code');
@@ -101,6 +106,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
 
 	Route::match(['get','post'],'all_visitors_list', 'ApiController@all_visitors_list');
+	Route::match(['get','post'],'my_visitors', 'ApiController@my_visitors');
 	
 	Route::match(['get','post'],'chat_with_guard', 'ApiController@chat_with_guard');
 

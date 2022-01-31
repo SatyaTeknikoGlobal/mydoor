@@ -2,16 +2,19 @@
 <?php
 $BackUrl = CustomHelper::BackUrl();
 $ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
-$role_id = Auth::guard('admin')->user()->role_id;
-$admin_society_id = Auth::guard('admin')->user()->society_id;
-
-$blocke_id = (isset($blockes->id))?$blockes->id:'';
-$name = (isset($blockes->name))?$blockes->name:'';
-$society_id = (isset($blockes->society_id))?$blockes->society_id:'';
-$status = (isset($blockes->status))?$blockes->status:'';
 
 
-$routeName = CustomHelper::getSadminRouteName();
+$flats_id = (isset($flats->id))?$flats->id:'';
+$society_id = (isset($flats->society_id))?$flats->society_id:'';
+$name = (isset($flats->name))?$flats->name:'';
+
+$details = (isset($flats->details))?$flats->details:'';
+$square_feet = (isset($flats->square_feet))?$flats->square_feet:'';
+$maintainance_fee = (isset($flats->maintainance_fee))?$flats->maintainance_fee:'';
+$status = (isset($flats->status))?$flats->status:'';
+
+
+$routeName = CustomHelper::getAdminRouteName();
 $storage = Storage::disk('public');
 $path = 'influencer/';
 
@@ -60,14 +63,11 @@ $path = 'influencer/';
                          <form method="POST" action="" accept-charset="UTF-8" enctype="multipart/form-data" role="form">
                             {{ csrf_field() }}
 
-                            <input type="hidden" name="id" value="{{$blocke_id}}">
+                            <input type="hidden" name="id" value="{{$flats_id}}">
 
-
-
-                                <?php if($role_id == 0){?>
                              <div class="form-group">
                                 <label for="userName">Society Name<span class="text-danger">*</span></label>
-                               <select name="society_id" class="form-control select2">
+                               <select name="society_id" id="society_id" class="form-control select2">
                                    <option value="" selected disabled>Select Society</option>
                                    <?php if(!empty($societies)){
                                     foreach($societies as $soci){
@@ -79,19 +79,41 @@ $path = 'influencer/';
 
                                 @include('snippets.errors_first', ['param' => 'society_id'])
                             </div>
-                        <?php }else{?>
-                            <input type="hidden" name="society_id" value="{{$admin_society_id}}">
-                            <?php }?>
-
-
 
 
                             <div class="form-group">
-                                <label for="userName">Name<span class="text-danger">*</span></label>
+                                <label for="userName"> Name<span class="text-danger">*</span></label>
                                 <input type="text" name="name" value="{{ old('name', $name) }}" id="name" class="form-control"  maxlength="255" />
 
                                 @include('snippets.errors_first', ['param' => 'name'])
                             </div>
+
+
+                                <div class="form-group">
+                                <label for="userName"> Details<span class="text-danger">*</span></label>
+                           
+                                <textarea name="details" id="description" class="form-control">{{ old('details', $details) }}</textarea>
+
+                                @include('snippets.errors_first', ['param' => 'details'])
+                            </div>
+
+
+                               <div class="form-group">
+                                <label for="userName"> Square Feet<span class="text-danger">*</span></label>
+                                <input type="text" name="square_feet" value="{{ old('square_feet', $square_feet) }}" id="square_feet" class="form-control"  maxlength="255" />
+
+                                @include('snippets.errors_first', ['param' => 'square_feet'])
+                            </div>
+
+
+                               <div class="form-group">
+                                <label for="userName">Maintainance Cost<span class="text-danger">*</span></label>
+                                <input type="text" name="maintainance_fee" value="{{ old('maintainance_fee', $maintainance_fee) }}" id="maintainance_fee" class="form-control"  maxlength="255" />
+
+                                @include('snippets.errors_first', ['param' => 'maintainance_fee'])
+                            </div>
+
+
 
                             
                        <div class="form-group">
@@ -133,7 +155,26 @@ $path = 'influencer/';
 <!-- END content-page -->
 
 
-@include('admin.common.footer')
+@include('sadmin.common.footer')
 <script>
     CKEDITOR.replace( 'description' );
+</script>
+<script type="text/javascript">
+    $('#society_id').change(function() {
+    var society_id = $(this).val();
+    var _token = '{{ csrf_token() }}';
+
+            $.ajax({
+                url: "{{ route($routeName.'.flats.get_blocks_from_society') }}",
+                type: "POST",
+                data: {society_id:society_id},
+                dataType:"HTML",
+                headers:{'X-CSRF-TOKEN': _token},
+                cache: false,
+                success: function(resp){
+                    $('#block_id').html(resp);
+                }
+            });
+
+   });
 </script>

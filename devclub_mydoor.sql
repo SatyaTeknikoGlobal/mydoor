@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 28, 2022 at 07:27 AM
+-- Generation Time: Jan 31, 2022 at 05:56 AM
 -- Server version: 10.1.47-MariaDB
 -- PHP Version: 7.2.30
 
@@ -1004,7 +1004,7 @@ INSERT INTO `guard_visitors` (`id`, `society_id`, `approved_by`, `block_id`, `fl
 (56, 1, NULL, 1, 1, '58', 'DRIVER', 'Cab', 'Meru', '1_guard_visitor1641925126.jpg', 0, '8336588699986865242424246', '2022-01-11 23:48:46', NULL, '2022-01-11 18:18:46', '2022-01-11 18:18:46'),
 (57, 1, NULL, 1, 1, '59', 'DRIVER', 'Cab', 'Meru', '1_guard_visitor1641925137.jpg', 0, '8336588699986865242424246', '2022-01-11 23:48:57', NULL, '2022-01-11 18:18:57', '2022-01-11 18:18:57'),
 (58, 1, NULL, 1, 1, '60', 'DRIVER', 'Cab', 'Meru', '1_guard_visitor1641925137.jpg', 0, '8336588699986865242424246', '2022-01-11 23:48:57', NULL, '2022-01-11 18:18:57', '2022-01-11 18:18:57'),
-(59, 1, '3', 1, 1, '61', 'DRIVER', 'Cab', 'Meru', '1_guard_visitor1641925142.jpg', 1, '8336588699986865242424246', '2022-01-11 23:49:02', '2022-01-11 23:53:10', '2022-01-11 18:19:02', '2022-01-11 18:19:02'),
+(59, 1, '3', 1, 1, '61', 'DRIVER', 'Cab', 'Meru', '1_guard_visitor1641925142.jpg', 1, '8336588699986865242424246', '2022-02-01 23:49:02', '2022-01-11 23:53:10', '2022-02-01 18:19:02', '2022-01-11 18:19:02'),
 (60, 1, NULL, 1, 2, '62', 'svdb', NULL, NULL, '1_guard_visitor1642147324.jpg', 0, '893782334', '2022-01-14 13:32:04', NULL, '2022-01-14 08:02:04', '2022-01-14 08:02:04'),
 (61, 1, NULL, 1, 1, '63', 'shsh', NULL, NULL, '1_guard_visitor1642147418.jpg', 0, '83868', '2022-01-14 13:33:38', NULL, '2022-01-14 08:03:38', '2022-01-14 08:03:38'),
 (62, 1, NULL, 1, 1, '64', 'svbsjx', NULL, NULL, '1_guard_visitor1642147457.jpg', 0, '8667797', '2022-01-14 13:34:17', NULL, '2022-01-14 08:04:17', '2022-01-14 08:04:17'),
@@ -1705,6 +1705,7 @@ CREATE TABLE `society_information` (
   `id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `society_id` varchar(255) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
   `number` varchar(255) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1715,8 +1716,9 @@ CREATE TABLE `society_information` (
 -- Dumping data for table `society_information`
 --
 
-INSERT INTO `society_information` (`id`, `title`, `society_id`, `number`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Police', '2', '100', 1, '2022-01-14 07:08:05', '2022-01-14 07:08:05');
+INSERT INTO `society_information` (`id`, `title`, `society_id`, `category_id`, `number`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Police', '1', 1, '100', 1, '2022-01-14 07:08:05', '2022-01-14 07:08:05'),
+(4, 'sadsad', '2', 1, 'asdasd', 1, '2022-01-31 05:09:39', '2022-01-31 05:09:39');
 
 -- --------------------------------------------------------
 
@@ -2449,7 +2451,7 @@ ALTER TABLE `society_documents`
 -- AUTO_INCREMENT for table `society_information`
 --
 ALTER TABLE `society_information`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `staff_attendance`

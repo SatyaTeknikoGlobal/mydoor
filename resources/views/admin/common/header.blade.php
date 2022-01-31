@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>MyDoor Admin - Dashboard</title>
-    <meta name="description" content="Dashboard | Fans Studio Admin">
+    <title>UBERIZE GATE Admin - Dashboard</title>
+    <meta name="description" content="">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Your website">
@@ -26,13 +26,18 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
-
+   
 
 </head>
  <style>
         tfoot {
             display: table-header-group;
         }
+/*.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+    border-color: var(--ck-color-base-border);
+    height: 300px;
+    overflow-y: auto;
+}*/
     </style>
 
 
@@ -70,7 +75,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
             <div class="headerbar-left">
                 <a href="{{url('/admin')}}" class="logo">
                     <img alt="Logo" src="{{asset('public/assets1/img/logo-xx.png')}}" />
-                    <span>MyDoor</span>
+                    <span>UBERIZE GATE</span>
                 </a>
             </div>
 
@@ -86,7 +91,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
                             <!-- item-->
                             <div class="dropdown-item noti-title">
                                 <h5 class="text-overflow">
-                                    <small>Hello, <?php echo isset(Auth::guard('admin')->user()->name) ? Auth::guard('admin')->user()->name : 'MyDoor';?></small>
+                                    <small>Hello, <?php echo isset(Auth::guard('admin')->user()->name) ? Auth::guard('admin')->user()->name : 'UBERIZE GATE';?></small>
                                 </h5>
                             </div>
 

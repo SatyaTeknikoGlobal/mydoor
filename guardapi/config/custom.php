@@ -1,34 +1,6 @@
 <?php
-
 $url = env('BASE_URL');
-
-
 return [
-    'complain_type' => [
-        'Electrical' => $url.'public/complaint/electrical.png',
-        'Plumbing'     => $url.'public/complaint/plumbing.png',
-        'Parking' => $url.'public/complaint/parking.png',
-        'Elevator'     => $url.'public/complaint/elevator.png',
-        'Cleaning'     => $url.'public/complaint/cleaning.png',
-        'Security'     => $url.'public/complaint/security_1.png',
-        'Other'     => $url.'public/complaint/other.png',
-    ],
-
-      'monthArr' =>[
-        '1'=>'January',
-        '2'=>'February',
-        '3'=>'March',
-        '4'=>'April',
-        '5'=>'May',
-        '6'=>'June',
-        '7'=>'July',
-        '8'=>'August',
-        '9'=>'September',
-        '10'=>'October',
-        '11'=>'November',
-        '12'=>'December',
-       
-    ],
     'monthArr' =>[
         '1'=>'January',
         '2'=>'February',
@@ -45,15 +17,7 @@ return [
        
     ],
 
-    'directoryArr' =>[
-        '1'=>'Resident Directory',
-        '2'=>'Service Directory',
-        '3'=>'Society Committee',
-        '4'=>'Emergency Directory',
-        '5'=>'Guards Directory',
-    ],
-
-    'deliveryArr' =>[
+   'deliveryArr' =>[
         'Food Delivery'=> $url.'/public/assets/delivery/Group.png',
         'Zomato Delivery'=>  $url.'/public/assets/delivery/Zomato Icon.png',
         'Swiggy Delivery'=>  $url.'/public/assets/delivery/Swiggy Icon.png',

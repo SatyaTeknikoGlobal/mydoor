@@ -4,6 +4,12 @@ $BackUrl = CustomHelper::BackUrl();
 $ADMIN_ROUTE_NAME = CustomHelper::getAdminRouteName();
 
 
+$role_id = Auth::guard('admin')->user()->role_id;
+$admin_society_id = Auth::guard('admin')->user()->society_id;
+
+
+
+
 $flats_id = (isset($flats->id))?$flats->id:'';
 $society_id = (isset($flats->society_id))?$flats->society_id:'';
 $block_id = (isset($flats->block_id))?$flats->block_id:'';
@@ -62,6 +68,8 @@ $path = 'influencer/';
 
                             <input type="hidden" name="id" value="{{$flats_id}}">
 
+
+                            <?php if($role_id == 0){?>
                              <div class="form-group">
                                 <label for="userName">Society Name<span class="text-danger">*</span></label>
                                <select name="society_id" id="society_id" class="form-control select2">
@@ -76,7 +84,11 @@ $path = 'influencer/';
 
                                 @include('snippets.errors_first', ['param' => 'society_id'])
                             </div>
+                        <?php }else{?>
 
+                            <input type="hidden" name="society_id" value="{{$admin_society_id}}">
+
+                        <?php }?>
 
                             <div class="form-group">
                                 <label for="userName">Block Name<span class="text-danger">*</span></label>

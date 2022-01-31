@@ -3058,6 +3058,102 @@ public function all_visitors_list(Request $request){
 
 }
 
+
+
+
+
+
+
+
+
+public function my_visitors(Request $request){
+    $validator =  Validator::make($request->all(), [
+        'token' => 'required',
+        'type' => 'required',
+        'search' => '',
+    ]);
+    $chats = array();
+    $user = null;
+    if ($validator->fails()) {
+        return response()->json([
+            'result' => false,
+            'message' => json_encode($validator->errors()),
+
+        ],400);
+    }
+    $user = JWTAuth::parseToken()->authenticate();
+    if (empty($user)){
+        return response()->json([
+            'result' => false,
+            'message' => '',
+        ],401);
+    }
+    $visitors = [];
+    $visitors = DB::table('guard_visitors')->where('flat_id',$user->flat_no)->latest();
+    if(!empty($request->search)){
+        $visitors->where('name', 'like', '%' . $request->search . '%');
+        $visitors->orWhere('phone', 'like', '%' . $request->search . '%');
+    }
+    if($request->type == 'past'){
+        $visitors->where('approved_by','!=',null);
+        $visitors->where('exit_at','!=',null);
+        $visitors->where('is_approve',1);
+        $visitors->whereDate('entry_at','<',date('Y-m-d'));
+    }
+    if($request->type == 'denied'){
+
+        $visitors->where('approved_by','!=',null);
+        $visitors->where('is_approve',0);
+
+
+    }
+
+    if($request->type == 'past'){
+
+    }
+
+
+
+
+    $visitors = $visitors->paginate(10);
+
+
+    if(!empty($visitors)){
+        foreach($visitors as $vis){
+            $vis->date = date("d M Y",strtotime($vis->created_at));
+
+            if(!empty($vis->approved_by)){
+                $user = User::where('id',$vis->approved_by)->first();
+                $vis->approved_by = $user->name??'';
+            }
+
+            if(!empty($vis->entry_at)){
+                $vis->entry_at = date('H:i A',strtotime($vis->entry_at));
+            }
+            if(!empty($vis->exit_at)){
+                $vis->exit_at = date('H:i A',strtotime($vis->exit_at));
+            }
+
+
+            if(!empty($vis->image)){
+                $vis->image = $this->url.'guardapi/public/uploads/images/visitors/'.$vis->image;
+            }
+        }
+    }
+
+    return response()->json([
+        'result' => 'success',
+        'message' => 'Visitors List',
+        'all_visitors' =>$visitors,
+    ],200);
+
+}
+
+
+
+
+
+
 public function send_notification($title, $body, $deviceToken,$type){
     $sendData = array(
         'body' => !empty($body) ? $body : '',
@@ -3545,12 +3641,36 @@ public function check_payment(Request $request){
 }
 
 
+public function society_directory_cat(Request $request){
+    
+    $categories = config('custom.directoryArr');
+    $categoriesArr = [];
+    if(!empty($categories)){
+        foreach ($categories as $key => $value) {
+            $dbArray = [];
+            $dbArray['id']= $key;
+            $dbArray['cat']= $value;
+
+            $categoriesArr[] = $dbArray;
+        }
+    }
+
+
+    return response()->json([
+        'result' => true,
+        'message' => 'Succesfully',
+        'categories' => $categoriesArr,
+    ],200);
+
+}
+
 
 
 
 public function emergency_nos(Request $request){
     $validator =  Validator::make($request->all(), [
         'token' => 'required',
+        'category_id' => 'required',
     ]);
     $user = null;
     if ($validator->fails()) {
@@ -3569,8 +3689,7 @@ public function emergency_nos(Request $request){
     }
 
     $emergency_nos = [];
-
-    $emergency_nos = DB::table('society_information')->where('society_id',$user->society_id)->get();
+    $emergency_nos = DB::table('society_information')->where('category_id',$request->category_id)->where('society_id',$user->society_id)->get();
 
     return response()->json([
         'result' => true,

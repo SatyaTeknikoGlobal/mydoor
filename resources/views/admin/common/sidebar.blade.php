@@ -62,6 +62,38 @@ $roleId = Auth::guard('admin')->user()->role_id;
 
 
 
+                     <?php 
+                if(CustomHelper::isAllowedSection('states' , $roleId , $type='show')){
+                    if(CustomHelper::isAllowedSection('cities' , $roleId , $type='show')){
+                        ?>
+                        <li class="submenu">
+                            <a id="tables" href="#">
+                                <i class="fas fa-envelope" title="Location"></i>
+                                <span title="Location"> Location </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="list-unstyled">
+                                @if(CustomHelper::isAllowedSection('states' , $roleId , $type='show'))
+                                <li>
+                                    <a href="{{ route($ADMIN_ROUTE_NAME.'.states.index') }}" <?php if($url == $baseurl.'/admin/states') echo "active"?> >States</a>
+                                </li>
+                                @endif
+                                @if(CustomHelper::isAllowedSection('cities' , $roleId , $type='show'))
+                                <li>
+                                    <a href="{{ route($ADMIN_ROUTE_NAME.'.cities.index') }}" <?php if($url == $baseurl.'/admin/cities') echo "active"?>>City</a>
+                                </li>
+                                @endif
+
+                            </ul>
+                        </li>
+
+
+
+                    <?php }}?>
+
+
+
+
                     <?php 
                     if(CustomHelper::isAllowedSection('admins' , $roleId , $type='show')){
                         ?>
@@ -78,11 +110,35 @@ $roleId = Auth::guard('admin')->user()->role_id;
 
 
 
+                    <?php 
+                    if(CustomHelper::isAllowedSection('guards' , $roleId , $type='show')){
+                        ?>
+                        @if(CustomHelper::isAllowedModule('guards'))
+                        <li class="submenu">
+                            <a href="{{ route($ADMIN_ROUTE_NAME.'.guards.index') }}" class="<?php if($url == $baseurl.'/admin/guards') echo "active"?>">
+                                <i class="fas fa-user"></i>
+                                <span>All Guards</span>
+                            </a>
+                        </li>
+
+                        @endif
+                    <?php }?>
 
 
 
+                      <?php 
+                    if(CustomHelper::isAllowedSection('banners' , $roleId , $type='show')){
+                        ?>
+                        @if(CustomHelper::isAllowedModule('banners'))
+                        <li class="submenu">
+                            <a href="{{ route($ADMIN_ROUTE_NAME.'.banners.index') }}" class="<?php if($url == $baseurl.'/admin/banners') echo "active"?>">
+                                <i class="fa fa-image"></i>
+                                <span>Banners</span>
+                            </a>
+                        </li>
 
-
+                        @endif
+                    <?php }?>
 
 
 
@@ -109,7 +165,7 @@ $roleId = Auth::guard('admin')->user()->role_id;
                         <li class="submenu">
                             <a href="{{ route($ADMIN_ROUTE_NAME.'.blockes.index') }}" class="<?php if($url == $baseurl.'/admin/blockes') echo "active"?>">
                                 <i class="fas fa-home"></i>
-                                <span> Blockes </span>
+                                <span> Blocks </span>
                             </a>
                         </li>
 
@@ -127,6 +183,22 @@ $roleId = Auth::guard('admin')->user()->role_id;
                             <a href="{{ route($ADMIN_ROUTE_NAME.'.flats.index') }}" class="<?php if($url == $baseurl.'/admin/flats') echo "active"?>">
                                 <i class="fas fa-home"></i>
                                 <span> Flats </span>
+                            </a>
+                        </li>
+
+                        @endif
+                    <?php }?>
+
+
+
+                    <?php 
+                    if(CustomHelper::isAllowedSection('flat_categories' , $roleId , $type='show')){
+                        ?>
+                        @if(CustomHelper::isAllowedModule('flat_categories'))
+                        <li class="submenu">
+                            <a href="{{ route($ADMIN_ROUTE_NAME.'.flat_categories.index') }}" class="<?php if($url == $baseurl.'/admin/flat_categories') echo "active"?>">
+                                <i class="fas fa-home"></i>
+                                <span> Flat Categories </span>
                             </a>
                         </li>
 
@@ -210,6 +282,23 @@ $roleId = Auth::guard('admin')->user()->role_id;
                             <a href="{{ route($ADMIN_ROUTE_NAME.'.complaints.index') }}" class="<?php if($url == $baseurl.'/admin/complaints') echo "active"?>">
                                 <i class="fas fa-comments"></i>
                                 <span> Complaints </span>
+                            </a>
+                        </li>
+
+                        @endif
+                    <?php }?>
+
+
+
+
+                      <?php 
+                    if(CustomHelper::isAllowedSection('notice_board' , $roleId , $type='show')){
+                        ?>
+                        @if(CustomHelper::isAllowedModule('notice_board'))
+                        <li class="submenu">
+                            <a href="{{ route($ADMIN_ROUTE_NAME.'.notice_board.index') }}" class="<?php if($url == $baseurl.'/admin/notice_board') echo "active"?>">
+                                <i class="fa fa-clipboard"></i>
+                                <span>Notice Board</span>
                             </a>
                         </li>
 
